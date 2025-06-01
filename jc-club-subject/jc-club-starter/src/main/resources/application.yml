@@ -1,0 +1,26 @@
+server:
+  port: 3000
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password:
+    url:
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      initial-size: 20 # 数据库连接池的初始化大小
+      min-idle: 20 # 数据库连接池中的最小空闲连接
+      max-active: 50 # 数据库连接池的最大连接数
+      max-wait: 60000 # 获取连接时最大等待时间
+      stat-view-servlet:
+        enabled: true
+        url-pattern: /druid/*
+        login-username: admin
+      filter:
+        stat:
+          enabled: true
+          log-slow-sql: true
+          slow-sql-millis: 2000
+        wall:
+          enabled: true
+
