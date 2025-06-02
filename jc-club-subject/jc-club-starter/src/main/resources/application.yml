@@ -4,8 +4,8 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
-    password:
-    url:
+    password: HBTDa6OR6AqXXISrlRNR+A9yakLt2NnRmPQCjKCcowYRI6M7MxA2n2mxS0hlzJSmWQXAiXKddfeSa2DG+YAq9Q==
+    url: jdbc:mysql://xxxxx:3306/jc_club?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&useSSL=false
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
       initial-size: 20 # 数据库连接池的初始化大小
@@ -23,4 +23,15 @@ spring:
           slow-sql-millis: 2000
         wall:
           enabled: true
+        config:
+          enabled: true
+      connect-properties:
+        config.decrypt: true
+        config.decrypt.key: ${druid.decrypt.key}
 
+# 密钥配置（建议从环境变量或安全配置中心获取）
+druid:
+  decrypt:
+    key: MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAJP1FFh/B+5hTrqhzW91Fcxk9kyNNj7dtcmWbIv+O+WxxDkOwsI4wDydg+4zucDxmOUiowZ1DNtbeovXtIV1/wsCAwEAAQ==
+logging:
+  config: classpath:log4j2-spring.xml
