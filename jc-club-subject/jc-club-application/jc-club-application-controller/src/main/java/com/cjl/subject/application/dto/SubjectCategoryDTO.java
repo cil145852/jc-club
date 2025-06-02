@@ -1,18 +1,18 @@
-package com.cjl.subject.infra.basic.entity;
+package com.cjl.subject.application.dto;
 
 import lombok.Data;
 
 import java.util.Date;
-import java.io.Serializable;
 
 /**
- * 题目分类(SubjectCategory)实体类
- *
- * @author makejava
- * @since 2025-06-01 16:58:56
+ * @author liang
+ * @version 1.0
+ * @CreateDate 2025-06-02-20:45
+ * @Description
  */
+
 @Data
-public class SubjectCategory implements Serializable {
+public class SubjectCategoryDTO {
     /**
      * 主键
      */
@@ -50,4 +50,3 @@ public class SubjectCategory implements Serializable {
      */
     private Date updateTime;
 }
-
