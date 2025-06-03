@@ -1,0 +1,45 @@
+package com.cjl.subject.application.controller;
+
+import com.cjl.subject.application.convert.SubjectLabelDTOConverter;
+import com.cjl.subject.application.dto.SubjectLabelDTO;
+import com.cjl.subject.common.entity.Result;
+import com.cjl.subject.domain.entity.SubjectLabelBO;
+import com.cjl.subject.domain.service.SubjectLabelDomainService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.Resource;
+
+/**
+ * @author liang
+ * @version 1.0
+ * @CreateDate 2025-06-03-16:54
+ * @Description 标签controller
+ */
+@RestController
+@RequestMapping("/subject/label")
+@Slf4j
+public class SubjectLabelController {
+    @Resource
+    private SubjectLabelDomainService subjectLabelDomainService;
+
+    /**
+     * 添加标签
+     * @param subjectLabelDTO
+     * @return
+     */
+    @PostMapping("/add")
+    public Result<Boolean> add(@RequestBody SubjectLabelDTO subjectLabelDTO) {
+        try {
+            SubjectLabelBO subjectLabelBO = SubjectLabelDTOConverter.INSTANCE.convertDtoToBo(subjectLabelDTO);
+            Boolean result = subjectLabelDomainService.add(subjectLabelBO);
+            return Result.ok(result);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.fail(false);
+        }
+    }
+}
