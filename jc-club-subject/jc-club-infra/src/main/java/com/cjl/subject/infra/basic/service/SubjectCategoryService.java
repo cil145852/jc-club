@@ -35,7 +35,7 @@ public interface SubjectCategoryService {
      * @param subjectCategory 实例对象
      * @return 实例对象
      */
-    SubjectCategory update(SubjectCategory subjectCategory);
+    Integer update(SubjectCategory subjectCategory);
 
     /**
      * 通过主键删除数据
@@ -46,7 +46,7 @@ public interface SubjectCategoryService {
     boolean deleteById(Long id);
 
     /**
-     * 根据条件查询所有一级分类
+     * 根据条件查询分类
      * @return
      */
     List<SubjectCategory> queryCategory(SubjectCategory subjectCategory);

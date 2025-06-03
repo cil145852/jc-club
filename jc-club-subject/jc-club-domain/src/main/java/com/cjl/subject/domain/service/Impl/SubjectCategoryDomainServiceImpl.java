@@ -1,6 +1,7 @@
 package com.cjl.subject.domain.service.Impl;
 
 import com.alibaba.fastjson.JSON;
+import com.cjl.subject.common.enums.IsDeletedFlagEnum;
 import com.cjl.subject.domain.convert.SubjectCategoryConverter;
 import com.cjl.subject.domain.entity.SubjectCategoryBO;
 import com.cjl.subject.domain.service.SubjectCategoryDomainService;
@@ -24,20 +25,59 @@ public class SubjectCategoryDomainServiceImpl implements SubjectCategoryDomainSe
     @Resource
     private SubjectCategoryService subjectCategoryService;
 
+    /**
+     * 添加分类
+     *
+     * @param subjectCategoryBO
+     */
     @Override
     public void add(SubjectCategoryBO subjectCategoryBO) {
         SubjectCategory subjectCategory = SubjectCategoryConverter.INSTANCE.convertBoToCategory(subjectCategoryBO);
         subjectCategoryService.insert(subjectCategory);
     }
 
+    /**
+     * 根据条件查询分类
+     *
+     * @param subjectCategoryBO
+     * @return
+     */
     @Override
     public List<SubjectCategoryBO> queryCategory(SubjectCategoryBO subjectCategoryBO) {
         SubjectCategory subjectCategory = SubjectCategoryConverter.INSTANCE.convertBoToCategory(subjectCategoryBO);
+        subjectCategory.setIsDeleted(IsDeletedFlagEnum.UN_DELETED.getCode());
         List<SubjectCategory> subjectCategoryList = subjectCategoryService.queryCategory(subjectCategory);
         List<SubjectCategoryBO> boList = SubjectCategoryConverter.INSTANCE.convertCategoryListToBoList(subjectCategoryList);
         if (log.isInfoEnabled()) {
             log.info("SubjectCategoryDomainServiceImpl.queryPrimaryCategory.BOList:{}", JSON.toJSONString(boList));
         }
         return boList;
+    }
+
+    /**
+     * 修改分类
+     *
+     * @param subjectCategoryBO
+     * @return
+     */
+    @Override
+    public Boolean update(SubjectCategoryBO subjectCategoryBO) {
+        SubjectCategory subjectCategory = SubjectCategoryConverter.INSTANCE.convertBoToCategory(subjectCategoryBO);
+        Integer count = subjectCategoryService.update(subjectCategory);
+        return count > 0;
+    }
+
+    /**
+     * 删除分类
+     *
+     * @param subjectCategoryBO
+     * @return
+     */
+    @Override
+    public Boolean delete(SubjectCategoryBO subjectCategoryBO) {
+        SubjectCategory subjectCategory = SubjectCategoryConverter.INSTANCE.convertBoToCategory(subjectCategoryBO);
+        subjectCategory.setIsDeleted(IsDeletedFlagEnum.DELETED.getCode());
+        Integer count = subjectCategoryService.update(subjectCategory);
+        return count > 0;
     }
 }

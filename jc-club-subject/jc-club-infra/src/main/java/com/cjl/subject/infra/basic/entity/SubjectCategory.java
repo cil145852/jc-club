@@ -49,5 +49,9 @@ public class SubjectCategory implements Serializable {
      * 更新时间
      */
     private Date updateTime;
+    /**
+     * 删除标识
+     */
+    private Integer isDeleted;
 }
 
