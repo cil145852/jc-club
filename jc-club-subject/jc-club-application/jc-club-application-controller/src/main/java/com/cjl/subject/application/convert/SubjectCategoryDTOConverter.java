@@ -5,6 +5,8 @@ import com.cjl.subject.domain.entity.SubjectCategoryBO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
+import java.util.List;
+
 /**
  * @author liang
  * @version 1.0
@@ -15,5 +17,7 @@ import org.mapstruct.factory.Mappers;
 public interface SubjectCategoryDTOConverter {
     SubjectCategoryDTOConverter INSTANCE = Mappers.getMapper(SubjectCategoryDTOConverter.class);
 
-    SubjectCategoryBO convertBoToCategory(SubjectCategoryDTO subjectCategoryDTO);
+    SubjectCategoryBO convertDtoToBo(SubjectCategoryDTO subjectCategoryDTO);
+
+    List<SubjectCategoryDTO> convertBoListToDtoList(List<SubjectCategoryBO> subjectCategoryBOList);
 }

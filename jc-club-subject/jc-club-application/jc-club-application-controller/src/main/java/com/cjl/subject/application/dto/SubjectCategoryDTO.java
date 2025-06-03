@@ -2,8 +2,6 @@ package com.cjl.subject.application.dto;
 
 import lombok.Data;
 
-import java.util.Date;
-
 /**
  * @author liang
  * @version 1.0
@@ -33,20 +31,4 @@ public class SubjectCategoryDTO {
      * 父级id
      */
     private Long parentId;
-    /**
-     * 创建人
-     */
-    private String createdBy;
-    /**
-     * 创建时间
-     */
-    private Date createdTime;
-    /**
-     * 更新人
-     */
-    private String updateBy;
-    /**
-     * 更新时间
-     */
-    private Date updateTime;
 }
