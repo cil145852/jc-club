@@ -2,6 +2,8 @@ package com.cjl.subject.domain.service;
 
 import com.cjl.subject.domain.entity.SubjectLabelBO;
 
+import java.util.List;
+
 /**
  * @author liang
  * @version 1.0
@@ -31,4 +33,12 @@ public interface SubjectLabelDomainService {
      * @return
      */
     Boolean delete(SubjectLabelBO subjectLabelBO);
+
+    /**
+     * 查询分类下的标签
+     *
+     * @param subjectLabelBO
+     * @return
+     */
+    List<SubjectLabelBO> queryLabelByCategoryId(SubjectLabelBO subjectLabelBO);
 }

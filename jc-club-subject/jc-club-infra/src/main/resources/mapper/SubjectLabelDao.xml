@@ -92,6 +92,15 @@
             </if>
         </where>
     </select>
+    <select id="batchQueryByIds" resultMap="SubjectLabelMap">
+        select
+        id, label_name, sort_num, created_by, created_time, update_by, update_time, is_deleted
+        from subject_label
+        where id in
+        <foreach open="(" close=")" collection="labelIds" item="labelId" separator=",">
+            #{labelId}
+        </foreach>
+    </select>
 
     <!--新增所有列-->
     <insert id="insert" keyProperty="id" useGeneratedKeys="true">

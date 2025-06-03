@@ -6,21 +6,27 @@ import java.io.Serializable;
 
 /**
  * 题目标签bo
+ * @author chaij
  */
 @Data
 public class SubjectLabelBO implements Serializable {
     private static final long serialVersionUID = -31021113497242037L;
-/**
+    /**
      * 主键
      */
     private Long id;
-/**
+    /**
      * 标签名称
      */
     private String labelName;
-/**
+    /**
      * 排序
      */
     private Integer sortNum;
+
+    /**
+     * 题目分类id
+     */
+    private Long categoryId;
 }
 

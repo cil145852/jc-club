@@ -1,6 +1,5 @@
 package com.cjl.subject.domain.service.Impl;
 
-import com.alibaba.fastjson.JSON;
 import com.cjl.subject.common.enums.IsDeletedFlagEnum;
 import com.cjl.subject.domain.convert.SubjectCategoryConverter;
 import com.cjl.subject.domain.entity.SubjectCategoryBO;
@@ -33,6 +32,7 @@ public class SubjectCategoryDomainServiceImpl implements SubjectCategoryDomainSe
     @Override
     public void add(SubjectCategoryBO subjectCategoryBO) {
         SubjectCategory subjectCategory = SubjectCategoryConverter.INSTANCE.convertBoToCategory(subjectCategoryBO);
+        subjectCategory.setIsDeleted(IsDeletedFlagEnum.UN_DELETED.getCode());
         subjectCategoryService.insert(subjectCategory);
     }
 
@@ -48,9 +48,6 @@ public class SubjectCategoryDomainServiceImpl implements SubjectCategoryDomainSe
         subjectCategory.setIsDeleted(IsDeletedFlagEnum.UN_DELETED.getCode());
         List<SubjectCategory> subjectCategoryList = subjectCategoryService.queryCategory(subjectCategory);
         List<SubjectCategoryBO> boList = SubjectCategoryConverter.INSTANCE.convertCategoryListToBoList(subjectCategoryList);
-        if (log.isInfoEnabled()) {
-            log.info("SubjectCategoryDomainServiceImpl.queryPrimaryCategory.BOList:{}", JSON.toJSONString(boList));
-        }
         return boList;
     }
 

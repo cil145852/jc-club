@@ -22,5 +22,10 @@ public class SubjectLabelDTO implements Serializable {
      * 排序
      */
     private Integer sortNum;
+
+    /**
+     * 题目分类id
+     */
+    private Long categoryId;
 }
 
