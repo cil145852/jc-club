@@ -1,8 +1,11 @@
 package com.cjl.subject.application.controller;
 
+import com.cjl.subject.application.convert.SubjectCategoryDTOConverter;
 import com.cjl.subject.application.convert.SubjectLabelDTOConverter;
+import com.cjl.subject.application.dto.SubjectCategoryDTO;
 import com.cjl.subject.application.dto.SubjectLabelDTO;
 import com.cjl.subject.common.entity.Result;
+import com.cjl.subject.domain.entity.SubjectCategoryBO;
 import com.cjl.subject.domain.entity.SubjectLabelBO;
 import com.cjl.subject.domain.service.SubjectLabelDomainService;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +31,7 @@ public class SubjectLabelController {
 
     /**
      * 添加标签
+     *
      * @param subjectLabelDTO
      * @return
      */
@@ -41,5 +45,25 @@ public class SubjectLabelController {
             e.printStackTrace();
             return Result.fail(false);
         }
+    }
+
+    /**
+     * 修改标签
+     *
+     * @param subjectLabelDTO
+     * @return
+     */
+    @PostMapping("/update")
+    public Result<Boolean> update(@RequestBody SubjectLabelDTO subjectLabelDTO) {
+        SubjectLabelBO subjectLabelBO = SubjectLabelDTOConverter.INSTANCE.convertDtoToBo(subjectLabelDTO);
+        Boolean result = subjectLabelDomainService.update(subjectLabelBO);
+        return Result.ok(result);
+    }
+
+    @PostMapping("/delete")
+    public Result<Boolean> delete(@RequestBody SubjectLabelDTO subjectLabelDTO) {
+        SubjectLabelBO subjectLabelBO = SubjectLabelDTOConverter.INSTANCE.convertDtoToBo(subjectLabelDTO);
+        Boolean result = subjectLabelDomainService.delete(subjectLabelBO);
+        return Result.ok(result);
     }
 }

@@ -16,4 +16,19 @@ public interface SubjectLabelDomainService {
      * @param subjectLabelBO
      */
     Boolean add(SubjectLabelBO subjectLabelBO);
+
+    /**
+     * 修改标签
+     *
+     * @param subjectLabelBO
+     */
+    Boolean update(SubjectLabelBO subjectLabelBO);
+
+    /**
+     * 删除标签
+     *
+     * @param subjectLabelBO
+     * @return
+     */
+    Boolean delete(SubjectLabelBO subjectLabelBO);
 }

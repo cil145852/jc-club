@@ -32,7 +32,7 @@ public interface SubjectLabelService {
      * @param subjectLabel 实例对象
      * @return 实例对象
      */
-    SubjectLabel update(SubjectLabel subjectLabel);
+    Integer update(SubjectLabel subjectLabel);
 
     /**
      * 通过主键删除数据
