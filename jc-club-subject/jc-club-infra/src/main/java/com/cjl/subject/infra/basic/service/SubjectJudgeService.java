@@ -2,6 +2,8 @@ package com.cjl.subject.infra.basic.service;
 
 import com.cjl.subject.infra.basic.entity.SubjectJudge;
 
+import java.util.List;
+
 /**
  * 判断题信息表(SubjectJudge)表服务接口
  *
@@ -42,4 +44,10 @@ public interface SubjectJudgeService {
      */
     boolean deleteById(Long id);
 
+    /**
+     * 批量插入数据
+     *
+     * @param subjectJudgeList 实例对象
+     */
+    void batchInsert(List<SubjectJudge> subjectJudgeList);
 }

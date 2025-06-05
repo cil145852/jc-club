@@ -74,4 +74,14 @@ public class SubjectMappingServiceImpl implements SubjectMappingService {
     public List<SubjectMapping> queryDistinctLabelId(SubjectMapping subjectMapping) {
         return subjectMappingDao.queryDistinctLabelId(subjectMapping);
     }
+
+    /**
+     * 批量插入
+     *
+     * @param subjectMappingList
+     */
+    @Override
+    public void batchInsert(List<SubjectMapping> subjectMappingList) {
+        subjectMappingDao.insertBatch(subjectMappingList);
+    }
 }

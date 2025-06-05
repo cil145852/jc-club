@@ -6,6 +6,7 @@ import com.cjl.subject.infra.basic.service.SubjectJudgeService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * 判断题信息表(SubjectJudge)表服务实现类
@@ -62,5 +63,15 @@ public class SubjectJudgeServiceImpl implements SubjectJudgeService {
     @Override
     public boolean deleteById(Long id) {
         return this.subjectJudgeDao.deleteById(id) > 0;
+    }
+
+    /**
+     * 批量插入数据
+     *
+     * @param subjectJudgeList 实例对象列表
+     */
+    @Override
+    public void batchInsert(List<SubjectJudge> subjectJudgeList) {
+        subjectJudgeDao.insertBatch(subjectJudgeList);
     }
 }

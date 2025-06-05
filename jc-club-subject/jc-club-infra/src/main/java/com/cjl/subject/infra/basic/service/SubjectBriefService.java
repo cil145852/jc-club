@@ -24,7 +24,7 @@ public interface SubjectBriefService {
      * @param subjectBrief 实例对象
      * @return 实例对象
      */
-    SubjectBrief insert(SubjectBrief subjectBrief);
+    Integer insert(SubjectBrief subjectBrief);
 
     /**
      * 修改数据

@@ -36,9 +36,8 @@ public class SubjectBriefServiceImpl implements SubjectBriefService {
      * @return 实例对象
      */
     @Override
-    public SubjectBrief insert(SubjectBrief subjectBrief) {
-        this.subjectBriefDao.insert(subjectBrief);
-        return subjectBrief;
+    public Integer insert(SubjectBrief subjectBrief) {
+        return this.subjectBriefDao.insert(subjectBrief);
     }
 
     /**

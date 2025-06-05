@@ -1,5 +1,6 @@
 package com.cjl.subject.infra.basic.entity;
 
+import lombok.Builder;
 import lombok.Data;
 
 import java.util.Date;
@@ -12,6 +13,7 @@ import java.io.Serializable;
  * @since 2025-06-04 08:15:47
  */
 @Data
+@Builder
 public class SubjectBrief implements Serializable {
     private static final long serialVersionUID = 869262839792328409L;
     /**

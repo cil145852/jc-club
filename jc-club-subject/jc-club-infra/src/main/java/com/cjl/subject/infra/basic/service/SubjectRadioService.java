@@ -2,6 +2,8 @@ package com.cjl.subject.infra.basic.service;
 
 import com.cjl.subject.infra.basic.entity.SubjectRadio;
 
+import java.util.List;
+
 /**
  * 单选题信息表(SubjectRadio)表服务接口
  *
@@ -42,4 +44,10 @@ public interface SubjectRadioService {
      */
     boolean deleteById(Long id);
 
+    /**
+     * 批量插入数据
+     *
+     * @param subjectRadioList 实例对象列表
+     */
+    void batchInsert(List<SubjectRadio> subjectRadioList);
 }
