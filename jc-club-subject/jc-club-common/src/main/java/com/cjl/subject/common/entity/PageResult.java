@@ -1,7 +1,9 @@
 package com.cjl.subject.common.entity;
 
+import lombok.Data;
 import org.apache.commons.lang3.ObjectUtils;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 
@@ -11,8 +13,8 @@ import java.util.List;
  * @CreateDate 2025-06-06-8:12
  * @Description 分页返回实体类
  */
-
-public class PageResult<T> {
+@Data
+public class PageResult<T> implements Serializable {
     private Integer pageNo = 1;
 
     private Integer pageSize = 20;
@@ -33,9 +35,6 @@ public class PageResult<T> {
             setTotal(records.size());
         }
     }
-    public List<T> getRecords() {
-        return result;
-    }
 
     public void setTotal(Integer total) {
         this.total = total;
@@ -51,12 +50,5 @@ public class PageResult<T> {
             this.start = 1;
             this.end = total;
         }
-    }
-
-    public void setPageSize(Integer pageSize) {
-        this.pageSize = pageSize;
-    }
-    public void setPageNo(Integer pageNo) {
-        this.pageNo = pageNo;
     }
 }

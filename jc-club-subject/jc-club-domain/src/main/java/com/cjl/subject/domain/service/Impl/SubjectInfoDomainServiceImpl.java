@@ -1,6 +1,5 @@
 package com.cjl.subject.domain.service.Impl;
 
-import com.alibaba.fastjson.JSON;
 import com.cjl.subject.common.entity.PageResult;
 import com.cjl.subject.common.enums.IsDeletedFlagEnum;
 import com.cjl.subject.domain.convert.SubjectInfoConverter;
@@ -17,6 +16,7 @@ import com.cjl.subject.infra.basic.service.SubjectLabelService;
 import com.cjl.subject.infra.basic.service.SubjectMappingService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -51,13 +51,12 @@ public class SubjectInfoDomainServiceImpl implements SubjectInfoDomainService {
      * @return
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void add(SubjectInfoBO subjectInfoBO) {
         //先插入subject_info表
         SubjectInfo subjectInfo = SubjectInfoConverter.INSTANCE.convertBoToEntity(subjectInfoBO);
         subjectInfo.setIsDeleted(IsDeletedFlagEnum.UN_DELETED.getCode());
         subjectInfoService.insert(subjectInfo);
-        log.info("subjectInfo:{}", JSON.toJSONString(subjectInfo));
-        log.info("subjectInfoBO:{}", JSON.toJSONString(subjectInfoBO));
 
         subjectInfoBO.setId(subjectInfo.getId());
         //再根据题目类型如:单选题、多选题、判断题、填空题、简答题插入对应的表
