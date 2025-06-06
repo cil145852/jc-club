@@ -2,6 +2,8 @@ package com.cjl.subject.infra.basic.service;
 
 import com.cjl.subject.infra.basic.entity.SubjectBrief;
 
+import java.util.List;
+
 /**
  * 简答题信息表(SubjectBrief)表服务接口
  *
@@ -42,4 +44,11 @@ public interface SubjectBriefService {
      */
     boolean deleteById(Long id);
 
+    /**
+     * 根据条件查询多条数据
+     *
+     * @param subjectBrief 查询条件
+     * @return 对象列表
+     */
+    List<SubjectBrief> query(SubjectBrief subjectBrief);
 }

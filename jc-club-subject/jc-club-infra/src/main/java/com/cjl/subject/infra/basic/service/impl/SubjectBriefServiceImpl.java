@@ -6,6 +6,8 @@ import com.cjl.subject.infra.basic.service.SubjectBriefService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * 简答题信息表(SubjectBrief)表服务实现类
@@ -61,5 +63,10 @@ public class SubjectBriefServiceImpl implements SubjectBriefService {
     @Override
     public boolean deleteById(Long id) {
         return this.subjectBriefDao.deleteById(id) > 0;
+    }
+
+    @Override
+    public List<SubjectBrief> query(SubjectBrief subjectBrief) {
+        return subjectBriefDao.query(subjectBrief);
     }
 }

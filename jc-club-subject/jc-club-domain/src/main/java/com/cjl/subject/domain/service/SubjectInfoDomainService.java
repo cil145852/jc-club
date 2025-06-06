@@ -15,4 +15,6 @@ public interface SubjectInfoDomainService {
    void add(SubjectInfoBO subjectInfoBO);
 
     PageResult<SubjectInfoBO> getSubjectPage(SubjectInfoBO subjectInfoBO);
+
+    SubjectInfoBO querySubjectInfo(SubjectInfoBO subjectInfoBO);
 }

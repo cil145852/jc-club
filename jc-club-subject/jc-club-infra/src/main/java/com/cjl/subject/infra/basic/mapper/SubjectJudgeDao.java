@@ -78,5 +78,12 @@ public interface SubjectJudgeDao {
      */
     int deleteById(Long id);
 
+    /**
+     * 根据条件查询数据
+     *
+     * @param subjectJudge
+     * @return
+     */
+    List<SubjectJudge> query(SubjectJudge subjectJudge);
 }
 

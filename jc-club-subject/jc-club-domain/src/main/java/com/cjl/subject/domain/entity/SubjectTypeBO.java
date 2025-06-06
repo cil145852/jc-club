@@ -5,27 +5,25 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 /**
  * @author liang
  * @version 1.0
- * @CreateDate 2025-06-04-8:48
- * 题目选项bo
+ * @CreateDate 2025-06-06-20:07
+ * @Description
  */
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class SubjectOptionBO {
+public class SubjectTypeBO {
     /**
-     * 选项类型
+     * 题目答案
      */
-    private Integer optionType;
+    private String subjectAnswer;
     /**
-     * 选项内容
+     * 选项列表
      */
-    private String optionContent;
-    /**
-     * 是否正确
-     */
-    private Integer isCorrect;
+    private List<SubjectOptionBO> optionList;
 }

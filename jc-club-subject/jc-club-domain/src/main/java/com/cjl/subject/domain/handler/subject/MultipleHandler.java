@@ -4,6 +4,8 @@ import com.cjl.subject.common.enums.IsDeletedFlagEnum;
 import com.cjl.subject.common.enums.SubjectTypeEnum;
 import com.cjl.subject.domain.convert.SubjectMultipleConverter;
 import com.cjl.subject.domain.entity.SubjectInfoBO;
+import com.cjl.subject.domain.entity.SubjectOptionBO;
+import com.cjl.subject.domain.entity.SubjectTypeBO;
 import com.cjl.subject.infra.basic.entity.SubjectMultiple;
 import com.cjl.subject.infra.basic.service.SubjectMultipleService;
 import org.springframework.stereotype.Component;
@@ -45,5 +47,23 @@ public class MultipleHandler implements SubjectTypeHandler{
                 })
                 .collect(Collectors.toList());
         subjectMultipleService.batchInsert(subjectMultipleList);
+    }
+
+    @Override
+    public SubjectTypeBO query(Long subjectId) {
+        SubjectMultiple subjectMultiple = new SubjectMultiple();
+        subjectMultiple.setSubjectId(subjectId);
+        subjectMultiple.setIsDeleted(IsDeletedFlagEnum.UN_DELETED.getCode());
+        List<SubjectMultiple> subjectMultipleList = subjectMultipleService.query(subjectMultiple);
+        if (!CollectionUtils.isEmpty(subjectMultipleList)) {
+            List<SubjectOptionBO> optionList = subjectMultipleList
+                    .stream()
+                    .map(SubjectMultipleConverter.INSTANCE::convertEntityToBo)
+                    .collect(Collectors.toList());
+            return SubjectTypeBO.builder()
+                    .optionList(optionList)
+                    .build();
+        }
+        return new SubjectTypeBO();
     }
 }

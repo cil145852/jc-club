@@ -2,6 +2,7 @@ package com.cjl.subject.domain.handler.subject;
 
 import com.cjl.subject.common.enums.SubjectTypeEnum;
 import com.cjl.subject.domain.entity.SubjectInfoBO;
+import com.cjl.subject.domain.entity.SubjectTypeBO;
 
 /**
  * @author liang
@@ -13,12 +14,23 @@ import com.cjl.subject.domain.entity.SubjectInfoBO;
 public interface SubjectTypeHandler {
     /**
      * 标识策略的类型
+     *
      * @return
      */
     SubjectTypeEnum getSubjectType();
+
     /**
      * 添加试题
+     *
      * @param subjectInfoBO
      */
     void add(SubjectInfoBO subjectInfoBO);
+
+    /**
+     * 查询试题信息
+     *
+     * @param id
+     * @return
+     */
+    SubjectTypeBO query(Long subjectId);
 }

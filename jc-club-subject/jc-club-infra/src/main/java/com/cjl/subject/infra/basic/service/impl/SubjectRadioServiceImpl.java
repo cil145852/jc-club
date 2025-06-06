@@ -6,6 +6,7 @@ import com.cjl.subject.infra.basic.service.SubjectRadioService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -68,5 +69,10 @@ public class SubjectRadioServiceImpl implements SubjectRadioService {
     @Override
     public void batchInsert(List<SubjectRadio> subjectRadioList) {
         subjectRadioDao.insertBatch(subjectRadioList);
+    }
+
+    @Override
+    public List<SubjectRadio> query(SubjectRadio subjectRadio) {
+        return subjectRadioDao.query(subjectRadio);
     }
 }

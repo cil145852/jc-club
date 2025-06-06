@@ -50,4 +50,12 @@ public interface SubjectJudgeService {
      * @param subjectJudgeList 实例对象
      */
     void batchInsert(List<SubjectJudge> subjectJudgeList);
+
+    /**
+     * 查询数据
+     *
+     * @param subjectJudge 筛选条件
+     * @return 查询结果
+     */
+    List<SubjectJudge> query(SubjectJudge subjectJudge);
 }

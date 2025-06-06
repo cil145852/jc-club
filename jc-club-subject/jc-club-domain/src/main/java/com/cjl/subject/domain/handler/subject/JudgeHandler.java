@@ -3,6 +3,8 @@ package com.cjl.subject.domain.handler.subject;
 import com.cjl.subject.common.enums.IsDeletedFlagEnum;
 import com.cjl.subject.common.enums.SubjectTypeEnum;
 import com.cjl.subject.domain.entity.SubjectInfoBO;
+import com.cjl.subject.domain.entity.SubjectOptionBO;
+import com.cjl.subject.domain.entity.SubjectTypeBO;
 import com.cjl.subject.infra.basic.entity.SubjectJudge;
 import com.cjl.subject.infra.basic.service.SubjectJudgeService;
 import org.springframework.stereotype.Component;
@@ -43,5 +45,26 @@ public class JudgeHandler implements SubjectTypeHandler {
                         .build())
                 .collect(Collectors.toList());
         subjectJudgeService.batchInsert(subjectJudgeList);
+    }
+
+    @Override
+    public SubjectTypeBO query(Long subjectId) {
+        SubjectJudge subjectJudge = SubjectJudge.builder()
+                .subjectId(subjectId)
+                .isDeleted(IsDeletedFlagEnum.UN_DELETED.getCode())
+                .build();
+        List<SubjectJudge> subjectJudgeList = subjectJudgeService.query(subjectJudge);
+        if (!CollectionUtils.isEmpty(subjectJudgeList)) {
+            List<SubjectOptionBO> optionList = subjectJudgeList
+                    .stream()
+                    .map(judge -> SubjectOptionBO.builder()
+                            .isCorrect(judge.getIsCorrect())
+                            .build())
+                    .collect(Collectors.toList());
+            return SubjectTypeBO.builder()
+                    .optionList(optionList)
+                    .build();
+        }
+        return new SubjectTypeBO();
     }
 }

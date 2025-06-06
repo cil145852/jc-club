@@ -50,4 +50,12 @@ public interface SubjectRadioService {
      * @param subjectRadioList 实例对象列表
      */
     void batchInsert(List<SubjectRadio> subjectRadioList);
+
+    /**
+     * 根据条件查询单选题信息
+     *
+     * @param subjectRadio 筛选条件
+     * @return 查询结果
+     */
+    List<SubjectRadio> query(SubjectRadio subjectRadio);
 }

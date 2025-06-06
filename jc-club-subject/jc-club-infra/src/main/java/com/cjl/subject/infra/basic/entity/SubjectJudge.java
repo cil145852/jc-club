@@ -1,7 +1,9 @@
 package com.cjl.subject.infra.basic.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 import java.io.Serializable;
@@ -14,6 +16,8 @@ import java.io.Serializable;
  */
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class SubjectJudge implements Serializable {
     private static final long serialVersionUID = 863621855800973029L;
     /**

@@ -74,4 +74,9 @@ public class SubjectJudgeServiceImpl implements SubjectJudgeService {
     public void batchInsert(List<SubjectJudge> subjectJudgeList) {
         subjectJudgeDao.insertBatch(subjectJudgeList);
     }
+
+    @Override
+    public List<SubjectJudge> query(SubjectJudge subjectJudge) {
+        return subjectJudgeDao.query(subjectJudge);
+    }
 }

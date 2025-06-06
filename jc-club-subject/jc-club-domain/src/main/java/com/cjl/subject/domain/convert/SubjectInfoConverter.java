@@ -23,4 +23,6 @@ public interface SubjectInfoConverter {
     SubjectInfo convertBoToEntity(SubjectInfoBO subjectInfoBO);
 
     List<SubjectInfoBO> convertListEntityToBo(List<SubjectInfo> subjectInfoList);
+
+    SubjectInfoBO convertEntityToBo(SubjectInfo subjectInfo);
 }

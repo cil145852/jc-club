@@ -60,6 +60,14 @@ public class SubjectController {
         return Result.ok(dtoPageResult);
     }
 
+    @PostMapping("/querySubjectInfo")
+    public Result<SubjectInfoDTO> querySubjectInfo(@RequestBody SubjectInfoDTO subjectInfoDTO) {
+        SubjectInfoBO subjectInfoBO = SubjectInfoDTOConverter.INSTANCE.convertDtoToBo(subjectInfoDTO);
+        subjectInfoBO = subjectInfoDomainService.querySubjectInfo(subjectInfoBO);
+        SubjectInfoDTO dto = SubjectInfoDTOConverter.INSTANCE.convertBoToDto(subjectInfoBO);
+        return Result.ok(dto);
+    }
+
 
 
 }
