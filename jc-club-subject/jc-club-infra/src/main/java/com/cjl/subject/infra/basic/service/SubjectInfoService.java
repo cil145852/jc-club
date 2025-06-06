@@ -2,6 +2,8 @@ package com.cjl.subject.infra.basic.service;
 
 import com.cjl.subject.infra.basic.entity.SubjectInfo;
 
+import java.util.List;
+
 /**
  * 题目信息表(SubjectInfo)表服务接口
  *
@@ -42,4 +44,10 @@ public interface SubjectInfoService {
      */
     boolean deleteById(Long id);
 
+    /**
+     * 根据条件查询数据条数
+     */
+    Integer countByCondition(SubjectInfo subjectInfo, Long categoryId, Long labelId);
+
+    List<SubjectInfo> queryPage(SubjectInfo subjectInfo, Long categoryId, Long labelId, Integer start, Integer pageSize);
 }

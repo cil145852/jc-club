@@ -1,5 +1,6 @@
 package com.cjl.subject.domain.service;
 
+import com.cjl.subject.common.entity.PageResult;
 import com.cjl.subject.domain.entity.SubjectInfoBO;
 
 /**
@@ -12,4 +13,6 @@ import com.cjl.subject.domain.entity.SubjectInfoBO;
 public interface SubjectInfoDomainService {
 
    void add(SubjectInfoBO subjectInfoBO);
+
+    PageResult<SubjectInfoBO> getSubjectPage(SubjectInfoBO subjectInfoBO);
 }

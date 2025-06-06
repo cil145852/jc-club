@@ -1,7 +1,9 @@
 package com.cjl.subject.application.dto;
 
+import com.cjl.subject.common.entity.PageInfo;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -11,7 +13,7 @@ import java.util.List;
  * 题目dto
  */
 @Data
-public class SubjectInfoDTO {
+public class SubjectInfoDTO extends PageInfo implements Serializable {
     private static final long serialVersionUID = -68638031646127733L;
     /**
      * 主键
@@ -57,4 +59,12 @@ public class SubjectInfoDTO {
      * 选项列表
      */
     private List<SubjectOptionDTO> optionList;
+    /**
+     * 分类id
+     */
+    private Long categoryId;
+    /**
+     * 标签id
+     */
+    private Long labelId;
 }

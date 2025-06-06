@@ -1,6 +1,7 @@
 package com.cjl.subject.domain.service.Impl;
 
 import com.alibaba.fastjson.JSON;
+import com.cjl.subject.common.entity.PageResult;
 import com.cjl.subject.common.enums.IsDeletedFlagEnum;
 import com.cjl.subject.domain.convert.SubjectInfoConverter;
 import com.cjl.subject.domain.entity.SubjectInfoBO;
@@ -70,5 +71,30 @@ public class SubjectInfoDomainServiceImpl implements SubjectInfoDomainService {
             });
         });
         subjectMappingService.batchInsert(subjectMappingList);
+    }
+
+    /**
+     * 分页查询试题
+     *
+     * @param subjectInfoBO
+     * @return
+     */
+    @Override
+    public PageResult<SubjectInfoBO> getSubjectPage(SubjectInfoBO subjectInfoBO) {
+        PageResult<SubjectInfoBO> pageResult = new PageResult<>();
+        pageResult.setPageNo(subjectInfoBO.getPageNo());
+        pageResult.setPageSize(subjectInfoBO.getPageSize());
+        Integer start = (subjectInfoBO.getPageNo() - 1) * subjectInfoBO.getPageSize();
+        SubjectInfo subjectInfo = SubjectInfoConverter.INSTANCE.convertBoToEntity(subjectInfoBO);
+        Integer count = subjectInfoService.countByCondition(subjectInfo, subjectInfoBO.getCategoryId(), subjectInfoBO.getLabelId());
+        if (count == 0) {
+            return pageResult;
+        }
+        List<SubjectInfo> subjectInfoList =subjectInfoService.queryPage(subjectInfo, subjectInfoBO.getCategoryId(),
+                subjectInfoBO.getLabelId(), start, subjectInfoBO.getPageSize());
+        List<SubjectInfoBO> subjectInfoBOList = SubjectInfoConverter.INSTANCE.convertListEntityToBo(subjectInfoList);
+        pageResult.setRecords(subjectInfoBOList);
+        pageResult.setTotal(count);
+        return pageResult;
     }
 }

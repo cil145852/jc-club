@@ -114,6 +114,49 @@ id, subject_name, subject_difficult, settle_name, subject_type, subject_score, s
             </if>
         </where>
     </select>
+    <select id="countByCondition" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM `subject_info` AS info
+        LEFT JOIN `subject_mapping` AS mapping ON info.id = mapping.subject_id
+        WHERE
+        info.is_deleted = 0
+        AND mapping.is_deleted = 0
+        AND mapping.category_id = #{categoryId}
+        AND mapping.label_id = #{labelId}
+        <if test="subjectInfo.subjectDifficult != null">
+            AND info.subject_difficult = #{subjectInfo.subjectDifficult}
+        </if>
+    </select>
+    <select id="queryPage" resultMap="SubjectInfoMap">
+        select
+        a.id,
+        a.subject_name,
+        a.subject_difficult,
+        a.settle_name,
+        a.subject_type,
+        a.subject_score,
+        a.subject_parse,
+        a.created_by,
+        a.created_time,
+        a.update_by,
+        a.update_time,
+        a.is_deleted
+        from subject_info a,
+        subject_mapping b
+        where
+        a.id = b.subject_id
+        and b.category_id = #{categoryId}
+        and b.label_id = #{labelId}
+        and a.is_deleted = 0
+        and b.is_deleted = 0
+        <if test="subjectInfo.subjectDifficult != null">
+            and a.subject_difficult = #{subjectInfo.subjectDifficult}
+        </if>
+        <if test="subjectInfo.subjectType != null">
+            and a.subject_type = #{subjectInfo.subjectType}
+        </if>
+        limit #{start},#{pageSize}
+    </select>
 
     <!--新增所有列-->
     <insert id="insert" keyProperty="id" useGeneratedKeys="true">

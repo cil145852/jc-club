@@ -33,6 +33,9 @@ public class PageResult<T> {
             setTotal(records.size());
         }
     }
+    public List<T> getRecords() {
+        return result;
+    }
 
     public void setTotal(Integer total) {
         this.total = total;

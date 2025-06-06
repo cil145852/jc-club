@@ -78,5 +78,14 @@ public interface SubjectInfoDao {
      */
     int deleteById(Long id);
 
+    Integer countByCondition(@Param("subjectInfo") SubjectInfo subjectInfo,
+                             @Param("categoryId") Long categoryId,
+                             @Param("labelId") Long labelId);
+
+    List<SubjectInfo> queryPage(@Param("subjectInfo") SubjectInfo subjectInfo,
+                                @Param("categoryId") Long categoryId,
+                                @Param("labelId") Long labelId,
+                                @Param("start") Integer start,
+                                @Param("pageSize") Integer pageSize);
 }
 

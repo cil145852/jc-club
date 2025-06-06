@@ -5,6 +5,8 @@ import com.cjl.subject.domain.entity.SubjectInfoBO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
+import java.util.List;
+
 /**
  * @author liang
  * @version 1.0
@@ -16,4 +18,6 @@ public interface SubjectInfoDTOConverter {
     SubjectInfoDTOConverter INSTANCE = Mappers.getMapper(SubjectInfoDTOConverter.class);
 
     SubjectInfoBO convertDtoToBo(SubjectInfoDTO subjectInfoDTO);
+
+    List<SubjectInfoDTO> convertListBoToDto(List<SubjectInfoBO> subjectInfoBOList);
 }

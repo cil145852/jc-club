@@ -5,6 +5,8 @@ import com.cjl.subject.infra.basic.entity.SubjectInfo;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
+import java.util.List;
+
 /**
  * @author liang
  * @version 1.0
@@ -19,4 +21,6 @@ public interface SubjectInfoConverter {
      * SubjectInfoBO转换为SubjectInfo
      */
     SubjectInfo convertBoToEntity(SubjectInfoBO subjectInfoBO);
+
+    List<SubjectInfoBO> convertListEntityToBo(List<SubjectInfo> subjectInfoList);
 }
