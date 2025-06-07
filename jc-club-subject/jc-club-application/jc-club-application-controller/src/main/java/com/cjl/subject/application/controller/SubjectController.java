@@ -56,7 +56,7 @@ public class SubjectController {
         SubjectInfoBO subjectInfoBO = SubjectInfoDTOConverter.INSTANCE.convertDtoToBo(subjectInfoDTO);
         PageResult<SubjectInfoBO> boPageResult = subjectInfoDomainService.getSubjectPage(subjectInfoBO);
         PageResult<SubjectInfoDTO> dtoPageResult = new PageResult<>();
-        dtoPageResult.setRecords(SubjectInfoDTOConverter.INSTANCE.convertListBoToDto(boPageResult.getRecords()));
+        dtoPageResult.setRecords(SubjectInfoDTOConverter.INSTANCE.convertListBoToDto(boPageResult.getResult()));
         return Result.ok(dtoPageResult);
     }
 
@@ -67,7 +67,4 @@ public class SubjectController {
         SubjectInfoDTO dto = SubjectInfoDTOConverter.INSTANCE.convertBoToDto(subjectInfoBO);
         return Result.ok(dto);
     }
-
-
-
 }

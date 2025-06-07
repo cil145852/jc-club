@@ -56,6 +56,10 @@ public class SubjectInfoDTO extends PageInfo implements Serializable {
      */
     private List<Long> labelIds;
     /**
+     * 标签name
+     */
+    private List<String> labelName;
+    /**
      * 选项列表
      */
     private List<SubjectOptionDTO> optionList;
