@@ -1,6 +1,6 @@
 package com.cjl.oss.controller;
 
-import com.cjl.oss.util.MinioUtil;
+import com.cjl.oss.service.FileService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,10 +15,10 @@ import javax.annotation.Resource;
 @RestController
 public class FileController {
     @Resource
-    private MinioUtil minioUtil;
+    private FileService fileService;
 
     @GetMapping("/test")
     public String test() throws Exception {
-        return minioUtil.listAllBucket().toString();
+        return fileService.listAllBucket().toString();
     }
 }

@@ -1,6 +1,10 @@
 server:
   port: 4000
 minio:
-  url: xxxxx
-  access-key: xxxx
-  secret-key: xxxx
+  url:
+  access-key:
+  secret-key:
+
+storage:
+  service:
+    type: minio
