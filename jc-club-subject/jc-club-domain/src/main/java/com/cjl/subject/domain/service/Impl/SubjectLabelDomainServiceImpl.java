@@ -1,12 +1,15 @@
 package com.cjl.subject.domain.service.Impl;
 
 import com.alibaba.fastjson.JSON;
+import com.cjl.subject.common.enums.CategoryTypeEnum;
 import com.cjl.subject.common.enums.IsDeletedFlagEnum;
 import com.cjl.subject.domain.convert.SubjectLabelConverter;
 import com.cjl.subject.domain.entity.SubjectLabelBO;
 import com.cjl.subject.domain.service.SubjectLabelDomainService;
+import com.cjl.subject.infra.basic.entity.SubjectCategory;
 import com.cjl.subject.infra.basic.entity.SubjectLabel;
 import com.cjl.subject.infra.basic.entity.SubjectMapping;
+import com.cjl.subject.infra.basic.service.SubjectCategoryService;
 import com.cjl.subject.infra.basic.service.SubjectLabelService;
 import com.cjl.subject.infra.basic.service.SubjectMappingService;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +36,9 @@ public class SubjectLabelDomainServiceImpl implements SubjectLabelDomainService 
     @Resource
     private SubjectMappingService subjectMappingService;
 
+    @Resource
+    private SubjectCategoryService subjectCategoryService;
+
     /**
      * 添加标签
      *
@@ -41,7 +47,8 @@ public class SubjectLabelDomainServiceImpl implements SubjectLabelDomainService 
      */
     @Override
     public Boolean add(SubjectLabelBO subjectLabelBO) {
-        SubjectLabel subjectLabel = SubjectLabelConverter.INSTANCE.convertBoToLabel(subjectLabelBO);
+        log.info("subjectLabelBO:{}", JSON.toJSONString(subjectLabelBO));
+        SubjectLabel subjectLabel = SubjectLabelConverter.INSTANCE.convertBoToEntity(subjectLabelBO);
         subjectLabel.setIsDeleted(IsDeletedFlagEnum.UN_DELETED.getCode());
         Integer count = subjectLabelService.insert(subjectLabel);
         return count > 0;
@@ -55,7 +62,7 @@ public class SubjectLabelDomainServiceImpl implements SubjectLabelDomainService 
      */
     @Override
     public Boolean update(SubjectLabelBO subjectLabelBO) {
-        SubjectLabel subjectLabel = SubjectLabelConverter.INSTANCE.convertBoToLabel(subjectLabelBO);
+        SubjectLabel subjectLabel = SubjectLabelConverter.INSTANCE.convertBoToEntity(subjectLabelBO);
         Integer count = subjectLabelService.update(subjectLabel);
         return count > 0;
     }
@@ -68,7 +75,7 @@ public class SubjectLabelDomainServiceImpl implements SubjectLabelDomainService 
      */
     @Override
     public Boolean delete(SubjectLabelBO subjectLabelBO) {
-        SubjectLabel subjectLabel = SubjectLabelConverter.INSTANCE.convertBoToLabel(subjectLabelBO);
+        SubjectLabel subjectLabel = SubjectLabelConverter.INSTANCE.convertBoToEntity(subjectLabelBO);
         subjectLabel.setIsDeleted(IsDeletedFlagEnum.DELETED.getCode());
         Integer count = subjectLabelService.update(subjectLabel);
         return count > 0;
@@ -83,6 +90,13 @@ public class SubjectLabelDomainServiceImpl implements SubjectLabelDomainService 
     @Override
     public List<SubjectLabelBO> queryLabelByCategoryId(SubjectLabelBO subjectLabelBO) {
         Long categoryId = subjectLabelBO.getCategoryId();
+        SubjectCategory subjectCategory = subjectCategoryService.queryById(categoryId);
+        if(subjectCategory.getCategoryType().equals(CategoryTypeEnum.PRIMARY.getCode())) {
+            SubjectLabel subjectLabel = new SubjectLabel();
+            subjectLabel.setCategoryId(categoryId);
+            List<SubjectLabel> subjectLabelList = subjectLabelService.query(subjectLabel);
+            return SubjectLabelConverter.INSTANCE.convertListEntityToBoList(subjectLabelList);
+        }
         SubjectMapping subjectMapping = new SubjectMapping();
         subjectMapping.setCategoryId(categoryId);
         subjectMapping.setIsDeleted(IsDeletedFlagEnum.UN_DELETED.getCode());
@@ -95,7 +109,7 @@ public class SubjectLabelDomainServiceImpl implements SubjectLabelDomainService 
                 .map(SubjectMapping::getLabelId)
                 .collect(Collectors.toList());
         List<SubjectLabel> labelList = subjectLabelService.batchQueryByIds(labelIds);
-        List<SubjectLabelBO> boList = SubjectLabelConverter.INSTANCE.convertLabelListToBoList(labelList);
+        List<SubjectLabelBO> boList = SubjectLabelConverter.INSTANCE.convertListEntityToBoList(labelList);
         boList.forEach(bo -> bo.setCategoryId(categoryId));
         return boList;
     }
