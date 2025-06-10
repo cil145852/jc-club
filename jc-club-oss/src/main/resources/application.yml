@@ -4,7 +4,3 @@ minio:
   url:
   access-key:
   secret-key:
-
-storage:
-  service:
-    type: minio
