@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: jc-club-subject
+  profiles:
+    active: dev
+  cloud:
+    nacos:
+      discovery:
+        enabled: true
+        server-addr: 118.178.59.99:8848
