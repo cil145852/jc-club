@@ -5,16 +5,10 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.cjl</groupId>
-        <artifactId>jc-club-subject</artifactId>
+        <artifactId>jc-club-subject-application</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>jc-club-application</artifactId>
-    <packaging>pom</packaging>
-    <modules>
-        <module>jc-club-application-mq</module>
-        <module>jc-club-application-controller</module>
-        <module>jc-club-application-job</module>
-    </modules>
+    <artifactId>jc-club-subject-application-mq</artifactId>
 
 </project>
