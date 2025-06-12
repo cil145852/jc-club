@@ -45,4 +45,10 @@ public class DruidEncryptUtil {
         }
         return null;
     }
+
+    public static void main(String[] args) {
+        String plainPassword = "cjl156803";
+        String encryptedPassword = encrypt(plainPassword);
+        System.out.println("Encrypted Password: " + encryptedPassword);
+    }
 }
