@@ -34,4 +34,22 @@ public class UserController {
         AuthUserBO authUserBO = AuthUserDTOConverter.INSTANCE.convertDTOToBO(authUserDTO);
         return Result.ok(authUserDomainService.register(authUserBO));
     }
+
+    /**
+     * 修改用户信息
+     */
+    @PostMapping("/update")
+    public Result<Boolean> update(@RequestBody AuthUserDTO authUserDTO) {
+        AuthUserBO authUserBO = AuthUserDTOConverter.INSTANCE.convertDTOToBO(authUserDTO);
+        return Result.ok(authUserDomainService.update(authUserBO));
+    }
+
+    /**
+     * 删除用户信息
+     */
+    @PostMapping("/delete")
+    public Result<Boolean> delete(@RequestBody AuthUserDTO authUserDTO) {
+        AuthUserBO authUserBO = AuthUserDTOConverter.INSTANCE.convertDTOToBO(authUserDTO);
+        return Result.ok(authUserDomainService.delete(authUserBO));
+    }
 }

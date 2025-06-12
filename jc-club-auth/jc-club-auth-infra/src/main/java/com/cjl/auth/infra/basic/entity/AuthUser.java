@@ -1,6 +1,9 @@
 package com.cjl.auth.infra.basic.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 import java.io.Serializable;
@@ -12,6 +15,9 @@ import java.io.Serializable;
  * @since 2025-06-12 20:38:14
  */
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class AuthUser implements Serializable {
     private static final long serialVersionUID = -36160802353255283L;
     /**

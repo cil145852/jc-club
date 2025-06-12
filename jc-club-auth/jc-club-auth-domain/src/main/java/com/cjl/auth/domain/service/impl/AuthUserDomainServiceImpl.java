@@ -32,4 +32,22 @@ public class AuthUserDomainServiceImpl implements AuthUserDomainService {
         Integer count = authUserService.insert(authUser);
         return count  > 0;
     }
+
+    @Override
+    public Boolean update(AuthUserBO authUserBO) {
+        AuthUser authUser = AuthUserBOConverter.INSTANCE.convertBOToEntity(authUserBO);
+        Integer count = authUserService.update(authUser);
+        return count > 0;
+    }
+
+    @Override
+    public Boolean delete(AuthUserBO authUserBO) {
+        AuthUser authUser = AuthUser
+                .builder()
+                .id(authUserBO.getId())
+                .isDeleted(IsDeletedFlagEnum.DELETED.getCode())
+                .build();
+        Integer count = authUserService.update(authUser);
+        return count > 0;
+    }
 }
