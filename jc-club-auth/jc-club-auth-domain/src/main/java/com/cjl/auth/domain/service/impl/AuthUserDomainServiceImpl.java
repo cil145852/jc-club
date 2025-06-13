@@ -1,5 +1,6 @@
 package com.cjl.auth.domain.service.impl;
 
+import cn.dev33.satoken.secure.SaSecureUtil;
 import com.cjl.auth.common.enums.AuthUserStatusEnum;
 import com.cjl.auth.common.enums.IsDeletedFlagEnum;
 import com.cjl.auth.domain.convert.AuthUserBOConverter;
@@ -24,9 +25,12 @@ public class AuthUserDomainServiceImpl implements AuthUserDomainService {
     @Resource
     private AuthUserService authUserService;
 
+    private final String SALT = "cjl225714";
+
     @Override
     public Boolean register(AuthUserBO authUserBO) {
         AuthUser authUser = AuthUserBOConverter.INSTANCE.convertBOToEntity(authUserBO);
+        authUser.setPassword(SaSecureUtil.md5BySalt(authUser.getPassword(), SALT));
         authUser.setIsDeleted(IsDeletedFlagEnum.UN_DELETED.getCode());
         authUser.setStatus(AuthUserStatusEnum.OPEN.getCode());
         Integer count = authUserService.insert(authUser);
