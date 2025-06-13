@@ -5,6 +5,7 @@ import com.cjl.auth.application.dto.AuthUserDTO;
 import com.cjl.auth.common.entity.Result;
 import com.cjl.auth.domain.entity.AuthUserBO;
 import com.cjl.auth.domain.service.AuthUserDomainService;
+import com.google.common.base.Preconditions;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -51,5 +52,14 @@ public class UserController {
     public Result<Boolean> delete(@RequestBody AuthUserDTO authUserDTO) {
         AuthUserBO authUserBO = AuthUserDTOConverter.INSTANCE.convertDTOToBO(authUserDTO);
         return Result.ok(authUserDomainService.delete(authUserBO));
+    }
+    /**
+     * 用户启用禁用
+     */
+    @PostMapping("/changeStatus")
+    public Result<Boolean> changeStatus(@RequestBody AuthUserDTO authUserDTO) {
+        Preconditions.checkNotNull(authUserDTO.getStatus(), "用户状态不能为空");
+        AuthUserBO authUserBO = AuthUserDTOConverter.INSTANCE.convertDTOToBO(authUserDTO);
+        return Result.ok(authUserDomainService.update(authUserBO));
     }
 }
