@@ -42,4 +42,5 @@ public interface AuthRoleService {
      */
     boolean deleteById(Long id);
 
+    AuthRole query(AuthRole authRole);
 }

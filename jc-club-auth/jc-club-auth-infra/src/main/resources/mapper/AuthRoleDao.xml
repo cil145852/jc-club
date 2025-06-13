@@ -29,10 +29,9 @@
         WHERE id = #{id}
     </select>
 
-    <!--查询指定行数据-->
-    <select id="queryAllByLimit" resultMap="AuthRoleMap">
-        select
-        id, role_name, role_key, status, created_by, created_time, update_by, update_time, is_deleted
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
         from auth_role
         <where>
             <if test="id != null">
@@ -64,10 +63,9 @@
             </if>
         </where>
     </select>
-
-    <!--统计总行数-->
-    <select id="count" resultType="java.lang.Long">
-        select count(1)
+    <select id="query" resultMap="AuthRoleMap">
+        select
+        id, role_name, role_key, status, created_by, created_time, update_by, update_time, is_deleted
         from auth_role
         <where>
             <if test="id != null">
