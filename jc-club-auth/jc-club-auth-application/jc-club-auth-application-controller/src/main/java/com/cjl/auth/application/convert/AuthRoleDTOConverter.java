@@ -14,5 +14,6 @@ import org.mapstruct.factory.Mappers;
 @Mapper
 public interface AuthRoleDTOConverter {
     AuthRoleDTOConverter INSTANCE = Mappers.getMapper(AuthRoleDTOConverter.class);
+
     AuthRoleBO convertDTOToBO(AuthRoleDTO authRoleDTO);
 }

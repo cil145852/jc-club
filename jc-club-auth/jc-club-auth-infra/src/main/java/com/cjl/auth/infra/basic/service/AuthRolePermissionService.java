@@ -2,6 +2,8 @@ package com.cjl.auth.infra.basic.service;
 
 import com.cjl.auth.infra.basic.entity.AuthRolePermission;
 
+import java.util.List;
+
 /**
  * 角色权限关联表(AuthRolePermission)表服务接口
  *
@@ -42,4 +44,5 @@ public interface AuthRolePermissionService {
      */
     boolean deleteById(Long id);
 
+    Integer batchInsert(List<AuthRolePermission> authRolePermissionList);
 }

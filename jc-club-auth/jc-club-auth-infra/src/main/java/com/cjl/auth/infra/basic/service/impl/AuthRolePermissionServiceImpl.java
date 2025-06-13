@@ -6,6 +6,7 @@ import com.cjl.auth.infra.basic.service.AuthRolePermissionService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * 角色权限关联表(AuthRolePermission)表服务实现类
@@ -60,5 +61,10 @@ public class AuthRolePermissionServiceImpl implements AuthRolePermissionService 
     @Override
     public boolean deleteById(Long id) {
         return this.authRolePermissionDao.deleteById(id) > 0;
+    }
+
+    @Override
+    public Integer batchInsert(List<AuthRolePermission> authRolePermissionList) {
+        return authRolePermissionDao.insertBatch(authRolePermissionList);
     }
 }
