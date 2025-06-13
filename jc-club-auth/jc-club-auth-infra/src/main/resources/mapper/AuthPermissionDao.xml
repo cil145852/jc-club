@@ -22,10 +22,19 @@
     <!--查询单个-->
     <select id="queryById" resultMap="AuthPermissionMap">
         SELECT id,
-               name,
+               `name`,
                parent_id,
-               type,
-               menu_url, SHOW, icon, permission_key, STATUS, created_by, created_time, update_by, update_time, is_deleted
+               `type`,
+               menu_url,
+               `show`,
+               icon,
+               permission_key,
+               `status`,
+               created_by,
+               created_time,
+               update_by,
+               update_time,
+               is_deleted
         FROM auth_permission
         WHERE id = #{id}
     </select>
@@ -33,7 +42,7 @@
     <!--查询指定行数据-->
     <select id="queryAllByLimit" resultMap="AuthPermissionMap">
         select
-        id, name, parent_id, type, menu_url, show, icon, permission_key, status, created_by, created_time, update_by,
+        id, `name`, parent_id, `type`, menu_url, `show`, icon, permission_key, `status`, created_by, created_time, update_by,
         update_time, is_deleted
         from auth_permission
         <where>
@@ -41,19 +50,19 @@
                 and id = #{id}
             </if>
             <if test="name != null and name != ''">
-                and name = #{name}
+                and `name` = #{name}
             </if>
             <if test="parentId != null">
                 and parent_id = #{parentId}
             </if>
             <if test="type != null">
-                and type = #{type}
+                and `type` = #{type}
             </if>
             <if test="menuUrl != null and menuUrl != ''">
                 and menu_url = #{menuUrl}
             </if>
             <if test="show != null">
-                and show = #{show}
+                and `show` = #{show}
             </if>
             <if test="icon != null and icon != ''">
                 and icon = #{icon}
@@ -62,7 +71,7 @@
                 and permission_key = #{permissionKey}
             </if>
             <if test="status != null">
-                and status = #{status}
+                and `status` = #{status}
             </if>
             <if test="createdBy != null and createdBy != ''">
                 and created_by = #{createdBy}
@@ -91,19 +100,19 @@
                 and id = #{id}
             </if>
             <if test="name != null and name != ''">
-                and name = #{name}
+                and `name` = #{name}
             </if>
             <if test="parentId != null">
                 and parent_id = #{parentId}
             </if>
             <if test="type != null">
-                and type = #{type}
+                and `type` = #{type}
             </if>
             <if test="menuUrl != null and menuUrl != ''">
                 and menu_url = #{menuUrl}
             </if>
             <if test="show != null">
-                and show = #{show}
+                and `show` = #{show}
             </if>
             <if test="icon != null and icon != ''">
                 and icon = #{icon}
@@ -112,7 +121,7 @@
                 and permission_key = #{permissionKey}
             </if>
             <if test="status != null">
-                and status = #{status}
+                and `status` = #{status}
             </if>
             <if test="createdBy != null and createdBy != ''">
                 and created_by = #{createdBy}
@@ -134,14 +143,14 @@
 
     <!--新增所有列-->
     <insert id="insert" keyProperty="id" useGeneratedKeys="true">
-        INSERT INTO auth_permission(name, parent_id, type, menu_url, show, icon, permission_key, status, created_by,
+        INSERT INTO auth_permission(`name`, parent_id, `type`, menu_url, `show`, icon, permission_key, `status`, created_by,
                                     created_time, update_by, update_time, is_deleted)
         VALUES (#{name}, #{parentId}, #{type}, #{menuUrl}, #{show}, #{icon}, #{permissionKey}, #{status}, #{createdBy},
                 #{createdTime}, #{updateBy}, #{updateTime}, #{isDeleted})
     </insert>
 
     <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
-        insert into auth_permission(name, parent_id, type, menu_url, show, icon, permission_key, status, created_by,
+        insert into auth_permission(`name`, parent_id, `type`, menu_url, `show`, icon, permission_key, `status`, created_by,
         created_time, update_by, update_time, is_deleted)
         values
         <foreach collection="entities" item="entity" separator=",">
@@ -181,19 +190,19 @@
         update auth_permission
         <set>
             <if test="name != null and name != ''">
-                name = #{name},
+                `name` = #{name},
             </if>
             <if test="parentId != null">
                 parent_id = #{parentId},
             </if>
             <if test="type != null">
-                type = #{type},
+                `type` = #{type},
             </if>
             <if test="menuUrl != null and menuUrl != ''">
                 menu_url = #{menuUrl},
             </if>
             <if test="show != null">
-                show = #{show},
+                `show` = #{show},
             </if>
             <if test="icon != null and icon != ''">
                 icon = #{icon},
@@ -202,7 +211,7 @@
                 permission_key = #{permissionKey},
             </if>
             <if test="status != null">
-                status = #{status},
+                `status` = #{status},
             </if>
             <if test="createdBy != null and createdBy != ''">
                 created_by = #{createdBy},
