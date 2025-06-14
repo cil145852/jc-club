@@ -141,6 +141,28 @@
         </where>
     </select>
 
+    <select id="queryByIds" resultMap="AuthPermissionMap">
+        SELECT id,
+               `name`,
+               parent_id,
+               `type`,
+               menu_url,
+               `show`,
+               icon,
+               permission_key,
+               `status`,
+               created_by,
+               created_time,
+               update_by,
+               update_time,
+               is_deleted
+        FROM `auth_permission`
+        WHERE id IN
+        <foreach collection="list" item="permissionId" open="(" separator="," close=")">
+            #{permissionId}
+        </foreach>
+    </select>
+
     <!--新增所有列-->
     <insert id="insert" keyProperty="id" useGeneratedKeys="true">
         INSERT INTO auth_permission(`name`, parent_id, `type`, menu_url, `show`, icon, permission_key, `status`, created_by,

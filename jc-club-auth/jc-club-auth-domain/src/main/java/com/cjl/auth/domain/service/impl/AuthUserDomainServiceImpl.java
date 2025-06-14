@@ -6,18 +6,19 @@ import com.cjl.auth.common.enums.IsDeletedFlagEnum;
 import com.cjl.auth.domain.constants.AuthConstant;
 import com.cjl.auth.domain.convert.AuthUserBOConverter;
 import com.cjl.auth.domain.entity.AuthUserBO;
+import com.cjl.auth.domain.redis.RedisUtil;
 import com.cjl.auth.domain.service.AuthUserDomainService;
-import com.cjl.auth.infra.basic.entity.AuthRole;
-import com.cjl.auth.infra.basic.entity.AuthUser;
-import com.cjl.auth.infra.basic.entity.AuthUserRole;
-import com.cjl.auth.infra.basic.service.AuthRoleService;
-import com.cjl.auth.infra.basic.service.AuthUserRoleService;
-import com.cjl.auth.infra.basic.service.AuthUserService;
+import com.cjl.auth.infra.basic.entity.*;
+import com.cjl.auth.infra.basic.service.*;
+import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author liang
@@ -30,13 +31,18 @@ import javax.annotation.Resource;
 public class AuthUserDomainServiceImpl implements AuthUserDomainService {
     @Resource
     private AuthUserService authUserService;
-
     @Resource
     private AuthUserRoleService authUserRoleService;
-
     @Resource
     private AuthRoleService authRoleService;
-
+    @Resource
+    private AuthRolePermissionService authRolePermissionService;
+    @Resource
+    private AuthPermissionService authPermissionService;
+    @Resource
+    private RedisUtil redisUtil;
+    private final String AUTH_PERMISSION_PREFIX = "auth.permission";
+    private final String AUTH_ROLE_PREFIX = "auth.role";
     private final String SALT = "cjl225714";
 
     @Override
@@ -59,6 +65,21 @@ public class AuthUserDomainServiceImpl implements AuthUserDomainService {
                 .roleId(roleId)
                 .isDeleted(IsDeletedFlagEnum.UN_DELETED.getCode())
                 .build());
+        String roleKey = redisUtil.buildKey(AUTH_ROLE_PREFIX, authUser.getUsername());
+        List<AuthRole> roleList = new ArrayList<>();
+        roleList.add(authRole);
+        redisUtil.set(roleKey, new Gson().toJson(roleList));
+        List<AuthRolePermission> rolePermissionList = authRolePermissionService.queryByRoleIds(
+                roleList.stream()
+                .map(AuthRole::getId)
+                .collect(Collectors.toList())
+        );
+        List<Long> permissionIds = rolePermissionList.stream()
+                .map(AuthRolePermission::getPermissionId)
+                .collect(Collectors.toList());
+        List<AuthPermission> permissionList = authPermissionService.queryByIds(permissionIds);
+        String permissionKey = redisUtil.buildKey(AUTH_PERMISSION_PREFIX, authUser.getUsername());
+        redisUtil.set(permissionKey, new Gson().toJson(permissionList));
         return count > 0;
     }
 

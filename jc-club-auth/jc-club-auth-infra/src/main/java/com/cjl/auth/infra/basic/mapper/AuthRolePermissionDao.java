@@ -70,5 +70,12 @@ public interface AuthRolePermissionDao {
      */
     int deleteById(Long id);
 
+    /**
+     * 通过角色id查询权限
+     *
+     * @param roleIds
+     * @return
+     */
+    List<AuthRolePermission> queryByRoleIds(@Param("roleIds") List<Long> roleIds);
 }
 

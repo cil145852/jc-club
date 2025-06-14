@@ -1,7 +1,9 @@
 package com.cjl.club.gateway.auth;
 
 import cn.dev33.satoken.stp.StpInterface;
+import com.cjl.club.gateway.entity.AuthPermission;
 import com.cjl.club.gateway.redis.RedisUtil;
+import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -9,6 +11,7 @@ import org.springframework.util.StringUtils;
 import javax.annotation.Resource;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author liang
@@ -26,23 +29,28 @@ public class StpInterfaceImpl implements StpInterface {
 
     @Override
     public List<String> getPermissionList(Object loginId, String loginType) {
-        // 返回此 loginId 拥有的权限列表
-        return getAuthList(AUTH_PERMISSION_PREFIX, loginId.toString());
+        String authValue = getAuthValue(AUTH_PERMISSION_PREFIX, loginId.toString());
+        if (!StringUtils.hasText(authValue)) {
+            return Collections.emptyList();
+        }
+        List<AuthPermission> permissionList = new Gson().fromJson(authValue, new TypeToken<List<AuthPermission>>() {
+        }.getType());
+        return permissionList.stream().map(AuthPermission::getPermissionKey).collect(Collectors.toList());
     }
 
     @Override
     public List<String> getRoleList(Object loginId, String loginType) {
-        // 返回此 loginId 拥有的角色列表
-        return getAuthList(AUTH_ROLE_PREFIX, loginId.toString());
-    }
-
-    private List<String> getAuthList(String prefix, String loginId) {
-        String authKey = redisUtil.buildKey(prefix, loginId);
-        String authValue = redisUtil.get(authKey);
+        String authValue = getAuthValue(AUTH_ROLE_PREFIX, loginId.toString());
         if (!StringUtils.hasText(authValue)) {
             return Collections.emptyList();
         }
-        List<String> list = new Gson().fromJson(authValue, List.class);
-        return list;
+        List<AuthPermission> permissionList = new Gson().fromJson(authValue, new TypeToken<List<AuthPermission>>() {
+        }.getType());
+        return permissionList.stream().map(AuthPermission::getPermissionKey).collect(Collectors.toList());
+    }
+
+    private String getAuthValue(String prefix, String loginId) {
+        String authKey = redisUtil.buildKey(prefix, loginId);
+        return redisUtil.get(authKey);
     }
 }

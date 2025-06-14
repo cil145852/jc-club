@@ -2,6 +2,8 @@ package com.cjl.auth.infra.basic.service;
 
 import com.cjl.auth.infra.basic.entity.AuthPermission;
 
+import java.util.List;
+
 /**
  * 权限信息表(AuthPermission)表服务接口
  *
@@ -41,4 +43,8 @@ public interface AuthPermissionService {
      */
     boolean deleteById(Long id);
 
+    /**
+     * 通过多个id查询多条数据
+     */
+    List<AuthPermission> queryByIds(List<Long> permissionIds);
 }

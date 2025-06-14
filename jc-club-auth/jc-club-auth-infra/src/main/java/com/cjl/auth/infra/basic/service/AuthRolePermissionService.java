@@ -45,4 +45,12 @@ public interface AuthRolePermissionService {
     boolean deleteById(Long id);
 
     Integer batchInsert(List<AuthRolePermission> authRolePermissionList);
+
+    /**
+     * 通过角色id查询权限
+     *
+     * @param roleIds
+     * @return
+     */
+    List<AuthRolePermission> queryByRoleIds(List<Long> roleIds);
 }
