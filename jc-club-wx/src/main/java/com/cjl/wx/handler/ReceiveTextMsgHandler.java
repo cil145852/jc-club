@@ -1,10 +1,13 @@
 package com.cjl.wx.handler;
 
+import com.cjl.wx.redis.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author liang
@@ -15,6 +18,8 @@ import java.util.Random;
 @Component
 @Slf4j
 public class ReceiveTextMsgHandler implements WxChatMsgHandler{
+    @Resource
+    private RedisUtil redisUtil;
     @Override
     public WxChatMsgTypeEnum getMsgType() {
         return WxChatMsgTypeEnum.TEXT;
@@ -33,6 +38,8 @@ public class ReceiveTextMsgHandler implements WxChatMsgHandler{
         }
         Random random = new Random();
         String verifyCode = String.valueOf(random.nextInt(10000));
+        String key = redisUtil.buildKey(verifyCode);
+        redisUtil.setNx(key, fromUserName, 5L, TimeUnit.MINUTES);
         return getTextMessage(fromUserName, toUserName, "您当前的验证码是: " + verifyCode + " 五分钟内有效");
     }
 }
