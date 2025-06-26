@@ -137,6 +137,13 @@
         </where>
     </select>
 
+    <select id="querySubjectCount" resultType="java.lang.Integer">
+        SELECT count(DISTINCT subject_id)
+        FROM `subject_mapping` a
+        LEFT JOIN `subject_label` b ON a.label_id = b.id
+        WHERE b.category_id = #{id}
+    </select>
+
     <!--新增所有列-->
     <insert id="insert" keyProperty="id" useGeneratedKeys="true">
         INSERT INTO subject_category(category_name, category_type, image_url, parent_id, created_by, created_time,

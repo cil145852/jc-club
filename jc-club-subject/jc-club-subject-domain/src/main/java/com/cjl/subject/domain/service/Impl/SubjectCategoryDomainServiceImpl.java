@@ -48,6 +48,10 @@ public class SubjectCategoryDomainServiceImpl implements SubjectCategoryDomainSe
         subjectCategory.setIsDeleted(IsDeletedFlagEnum.UN_DELETED.getCode());
         List<SubjectCategory> subjectCategoryList = subjectCategoryService.queryCategory(subjectCategory);
         List<SubjectCategoryBO> boList = SubjectCategoryConverter.INSTANCE.convertCategoryListToBoList(subjectCategoryList);
+        boList.forEach(bo -> {
+            Integer subjectCount = subjectCategoryService.querySubjectCount(bo.getId());
+            bo.setCount(subjectCount);
+        });
         return boList;
     }
 

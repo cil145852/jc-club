@@ -72,4 +72,9 @@ public class SubjectCategoryServiceImpl implements SubjectCategoryService {
     public List<SubjectCategory> queryCategory(SubjectCategory subjectCategory) {
         return subjectCategoryDao.queryCategory(subjectCategory);
     }
+
+    @Override
+    public Integer querySubjectCount(Long id) {
+        return this.subjectCategoryDao.querySubjectCount(id);
+    }
 }
