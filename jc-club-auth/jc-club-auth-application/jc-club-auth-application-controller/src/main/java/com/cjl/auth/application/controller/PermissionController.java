@@ -6,12 +6,11 @@ import com.cjl.auth.common.entity.Result;
 import com.cjl.auth.domain.entity.AuthPermissionBO;
 import com.cjl.auth.domain.service.AuthPermissionDomainService;
 import com.google.common.base.Preconditions;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @author liang
@@ -62,5 +61,14 @@ public class PermissionController {
         Preconditions.checkNotNull(authPermissionDTO.getStatus(), "权限状态不能为空");
         AuthPermissionBO authPermissionBO = AuthPermissionDTOConverter.INSTANCE.convertDTOToBO(authPermissionDTO);
         return Result.ok(authPermissionDomainService.update(authPermissionBO));
+    }
+
+    /**
+     * 查询用户权限
+     */
+    @GetMapping("/getPermission")
+    public Result<List<String>> getPermission(@RequestParam("userName") String username) {
+        Preconditions.checkArgument(!StringUtils.isBlank(username), "用户名不能为空");
+        return Result.ok(authPermissionDomainService.getPermission(username));
     }
 }
