@@ -37,4 +37,9 @@ public interface SubjectCategoryDomainService {
      * @return
      */
     Boolean delete(SubjectCategoryBO subjectCategoryBO);
+
+    /**
+     * 查询大分类下的分类和标签
+     */
+    List<SubjectCategoryBO> queryCategoryAndLabel(SubjectCategoryBO subjectCategoryBO);
 }

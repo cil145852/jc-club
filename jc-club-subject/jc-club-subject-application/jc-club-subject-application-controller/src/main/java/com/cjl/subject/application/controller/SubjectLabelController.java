@@ -36,7 +36,7 @@ public class SubjectLabelController {
     @PostMapping("/add")
     public Result<Boolean> add(@RequestBody SubjectLabelDTO subjectLabelDTO) {
         try {
-            SubjectLabelBO subjectLabelBO = SubjectLabelDTOConverter.INSTANCE.convertDtoToBo(subjectLabelDTO);
+            SubjectLabelBO subjectLabelBO = SubjectLabelDTOConverter.INSTANCE.convertDTOToBO(subjectLabelDTO);
             Boolean result = subjectLabelDomainService.add(subjectLabelBO);
             return Result.ok(result);
         } catch (Exception e) {
@@ -53,7 +53,7 @@ public class SubjectLabelController {
      */
     @PostMapping("/update")
     public Result<Boolean> update(@RequestBody SubjectLabelDTO subjectLabelDTO) {
-        SubjectLabelBO subjectLabelBO = SubjectLabelDTOConverter.INSTANCE.convertDtoToBo(subjectLabelDTO);
+        SubjectLabelBO subjectLabelBO = SubjectLabelDTOConverter.INSTANCE.convertDTOToBO(subjectLabelDTO);
         Boolean result = subjectLabelDomainService.update(subjectLabelBO);
         return Result.ok(result);
     }
@@ -66,7 +66,7 @@ public class SubjectLabelController {
      */
     @PostMapping("/delete")
     public Result<Boolean> delete(@RequestBody SubjectLabelDTO subjectLabelDTO) {
-        SubjectLabelBO subjectLabelBO = SubjectLabelDTOConverter.INSTANCE.convertDtoToBo(subjectLabelDTO);
+        SubjectLabelBO subjectLabelBO = SubjectLabelDTOConverter.INSTANCE.convertDTOToBO(subjectLabelDTO);
         Boolean result = subjectLabelDomainService.delete(subjectLabelBO);
         return Result.ok(result);
     }
@@ -79,9 +79,9 @@ public class SubjectLabelController {
      */
     @PostMapping("/queryLabelByCategoryId")
     public Result<List<SubjectLabelDTO>> queryLabelByCategoryId(@RequestBody SubjectLabelDTO subjectLabelDTO) {
-        SubjectLabelBO subjectLabelBO = SubjectLabelDTOConverter.INSTANCE.convertDtoToBo(subjectLabelDTO);
+        SubjectLabelBO subjectLabelBO = SubjectLabelDTOConverter.INSTANCE.convertDTOToBO(subjectLabelDTO);
         List<SubjectLabelBO> subjectLabelBOList = subjectLabelDomainService.queryLabelByCategoryId(subjectLabelBO);
-        List<SubjectLabelDTO> result = SubjectLabelDTOConverter.INSTANCE.convertBoListToDtoList(subjectLabelBOList);
+        List<SubjectLabelDTO> result = SubjectLabelDTOConverter.INSTANCE.convertBOListToDTOList(subjectLabelBOList);
         return Result.ok(result);
     }
 }

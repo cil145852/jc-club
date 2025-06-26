@@ -2,6 +2,8 @@ package com.cjl.subject.application.dto;
 
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * @author liang
  * @version 1.0
@@ -41,4 +43,9 @@ public class SubjectCategoryDTO {
      * 分类下的题目数量
      */
     private Integer count;
+
+    /**
+     * 分类相关的标签
+     */
+    private List<SubjectLabelDTO> subjectLabelDTOList;
 }

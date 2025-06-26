@@ -2,6 +2,8 @@ package com.cjl.subject.domain.entity;
 
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * @author liang
  * @version 1.0
@@ -39,4 +41,9 @@ public class SubjectCategoryBO {
      * 分类下的题目数量
      */
     private Integer count;
+
+    /**
+     * 分类相关的标签
+     */
+    private List<SubjectLabelBO> subjectLabelBOList;
 }

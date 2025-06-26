@@ -1,6 +1,9 @@
 package com.cjl.subject.infra.basic.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 import java.io.Serializable;
@@ -12,6 +15,9 @@ import java.io.Serializable;
  * @since 2025-06-01 16:58:56
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class SubjectCategory implements Serializable {
     /**
      * 主键
