@@ -1,6 +1,7 @@
 package com.cjl.auth.application.controller;
 
 import cn.dev33.satoken.stp.SaTokenInfo;
+import cn.dev33.satoken.stp.StpUtil;
 import com.cjl.auth.application.convert.AuthUserDTOConverter;
 import com.cjl.auth.application.dto.AuthUserDTO;
 import com.cjl.auth.common.entity.Result;
@@ -68,6 +69,16 @@ public class UserController {
     public Result<SaTokenInfo> doLogin(@RequestParam("validCode") String verifyCode) {
         Preconditions.checkNotNull(verifyCode, "验证码不能为空");
         return Result.ok(authUserDomainService.doLogin(verifyCode));
+    }
+
+    /**
+     * 用户退出
+     */
+    @GetMapping("/logOut")
+    public Result logout(@RequestParam("userName") String username) {
+        Preconditions.checkNotNull(username, "用户名不能为空");
+        StpUtil.logout(username);
+        return Result.ok();
     }
 
     /**
