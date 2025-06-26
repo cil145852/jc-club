@@ -1,6 +1,5 @@
 package com.cjl.auth.application.dto;
 
-import com.sun.xml.internal.ws.developer.Serialization;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,7 +18,6 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AuthRoleDTO implements Serializable {
-    @Serialization
     private static final long serialVersionUID = -9134962227272706544L;
     /**
      * 主键

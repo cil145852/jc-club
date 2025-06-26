@@ -1,6 +1,5 @@
 package com.cjl.auth.domain.entity;
 
-import com.sun.xml.internal.ws.developer.Serialization;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -14,7 +13,6 @@ import java.util.List;
  */
 @Data
 public class AuthRolePermissionBO implements Serializable {
-    @Serialization
     private static final long serialVersionUID = 3782266107758528423L;
 /**
      * 主键

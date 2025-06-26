@@ -18,6 +18,8 @@ import java.util.concurrent.TimeUnit;
 @Component
 @Slf4j
 public class ReceiveTextMsgHandler implements WxChatMsgHandler{
+    private static final String VERIFY_CODE = "验证码";
+    private static final String LOGIN_PREFIX = "loginCode";
     @Resource
     private RedisUtil redisUtil;
     @Override
@@ -31,14 +33,14 @@ public class ReceiveTextMsgHandler implements WxChatMsgHandler{
         String content = msgMap.get("Content");
         String fromUserName = msgMap.get("FromUserName");
         String toUserName = msgMap.get("ToUserName");
-        if (!"验证码".equals(content)) {
+        if (!VERIFY_CODE.equals(content)) {
             String replyContent = "无法识别消息内容，您可以输入:\n" +
                     "1、验证码";
             return getTextMessage(fromUserName, toUserName, replyContent);
         }
         Random random = new Random();
-        String verifyCode = String.valueOf(random.nextInt(10000));
-        String key = redisUtil.buildKey(verifyCode);
+        String verifyCode = String.valueOf(random.nextInt(1000));
+        String key = redisUtil.buildKey(LOGIN_PREFIX, verifyCode);
         redisUtil.setNx(key, fromUserName, 5L, TimeUnit.MINUTES);
         return getTextMessage(fromUserName, toUserName, "您当前的验证码是: " + verifyCode + " 五分钟内有效");
     }
