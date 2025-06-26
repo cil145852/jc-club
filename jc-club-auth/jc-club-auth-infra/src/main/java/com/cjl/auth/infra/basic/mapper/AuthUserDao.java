@@ -27,7 +27,7 @@ public interface AuthUserDao {
      * @param authUser 查询条件
      * @return 总行数
      */
-    long count(AuthUser authUser);
+    Integer count(AuthUser authUser);
 
     /**
      * 新增数据
@@ -70,5 +70,9 @@ public interface AuthUserDao {
      */
     int deleteById(Long id);
 
+    /**
+     * 根据条件查询数据
+     */
+    List<AuthUser> query(AuthUser authUser);
 }
 

@@ -69,4 +69,14 @@ public class UserController {
         Preconditions.checkNotNull(verifyCode, "验证码不能为空");
         return Result.ok(authUserDomainService.doLogin(verifyCode));
     }
+
+    /**
+     * 获取用户信息
+     */
+    @PostMapping("/getUserInfo")
+    public Result<AuthUserDTO> getUserInfo(@RequestBody AuthUserDTO authUserDTO) {
+        AuthUserBO authUserBO = AuthUserDTOConverter.INSTANCE.convertDTOToBO(authUserDTO);
+        authUserBO = authUserDomainService.getUserInfo(authUserBO);
+        return Result.ok(AuthUserDTOConverter.INSTANCE.convertBOToDTO(authUserBO));
+    }
 }

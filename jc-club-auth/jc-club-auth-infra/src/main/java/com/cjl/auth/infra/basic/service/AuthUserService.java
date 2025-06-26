@@ -2,6 +2,8 @@ package com.cjl.auth.infra.basic.service;
 
 import com.cjl.auth.infra.basic.entity.AuthUser;
 
+import java.util.List;
+
 /**
  * 用户信息表(AuthUser)表服务接口
  *
@@ -40,4 +42,13 @@ public interface AuthUserService {
      */
     boolean deleteById(Long id);
 
+    /**
+     * 根据条件查询数据条目
+     */
+    Integer queryCount(AuthUser authUser);
+
+    /**
+     * 根据条件查询数据
+     */
+    List<AuthUser> query(AuthUser authUser);
 }

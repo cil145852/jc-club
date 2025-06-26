@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -62,6 +63,11 @@ public class AuthUserDomainServiceImpl implements AuthUserDomainService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Boolean register(AuthUserBO authUserBO) {
+        //注册时先校验用户是否存在
+        if (checkUserExist(authUserBO)) {
+            return true;
+        }
+        //开始注册用户
         AuthUser authUser = AuthUserBOConverter.INSTANCE.convertBOToEntity(authUserBO);
         if (authUser.getPassword() != null) {
             authUser.setPassword(SaSecureUtil.md5BySalt(authUser.getPassword(), SALT));
@@ -87,8 +93,8 @@ public class AuthUserDomainServiceImpl implements AuthUserDomainService {
         redisUtil.set(roleKey, new Gson().toJson(roleList));
         List<AuthRolePermission> rolePermissionList = authRolePermissionService.queryByRoleIds(
                 roleList.stream()
-                .map(AuthRole::getId)
-                .collect(Collectors.toList())
+                        .map(AuthRole::getId)
+                        .collect(Collectors.toList())
         );
         List<Long> permissionIds = rolePermissionList.stream()
                 .map(AuthRolePermission::getPermissionId)
@@ -96,6 +102,20 @@ public class AuthUserDomainServiceImpl implements AuthUserDomainService {
         List<AuthPermission> permissionList = authPermissionService.queryByIds(permissionIds);
         String permissionKey = redisUtil.buildKey(AUTH_PERMISSION_PREFIX, authUser.getUsername());
         redisUtil.set(permissionKey, new Gson().toJson(permissionList));
+        return count > 0;
+    }
+
+    /**
+     * 检查用户是否存在
+     *
+     * @param authUserBO
+     * @return
+     */
+    private Boolean checkUserExist(AuthUserBO authUserBO) {
+        AuthUser authUser = AuthUser.builder()
+                .username(authUserBO.getUsername())
+                .build();
+        Integer count = authUserService.queryCount(authUser);
         return count > 0;
     }
 
@@ -136,5 +156,24 @@ public class AuthUserDomainServiceImpl implements AuthUserDomainService {
         this.register(authUserBO);
         StpUtil.login(openId);
         return StpUtil.getTokenInfo();
+    }
+
+    /**
+     * 获取用户信息
+     *
+     * @param authUserBO
+     * @return
+     */
+    @Override
+    public AuthUserBO getUserInfo(AuthUserBO authUserBO) {
+        AuthUser authUser = AuthUser.builder()
+                .username(authUserBO.getUsername())
+                .build();
+        List<AuthUser> authUserList = authUserService.query(authUser);
+        if (CollectionUtils.isEmpty(authUserList)) {
+            return new AuthUserBO();
+        }
+        AuthUser authUserEntity = authUserList.get(0);
+        return AuthUserBOConverter.INSTANCE.convertEntityToBO(authUserEntity);
     }
 }

@@ -43,11 +43,9 @@
         WHERE id = #{id}
     </select>
 
-    <!--查询指定行数据-->
-    <select id="queryAllByLimit" resultMap="AuthUserMap">
-        select
-        id, username, password, nickname, phone, email, sex, avatar, status, introduce, created_by, ext_json,
-        created_time, update_by, update_time, is_deleted
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Integer">
+        select count(1)
         from auth_user
         <where>
             <if test="id != null">
@@ -57,7 +55,7 @@
                 and username = #{username}
             </if>
             <if test="password != null and password != ''">
-                and password = #{password}
+                and `password` = #{password}
             </if>
             <if test="nickname != null and nickname != ''">
                 and nickname = #{nickname}
@@ -75,7 +73,7 @@
                 and avatar = #{avatar}
             </if>
             <if test="status != null">
-                and status = #{status}
+                and `status` = #{status}
             </if>
             <if test="introduce != null and introduce != ''">
                 and introduce = #{introduce}
@@ -99,12 +97,12 @@
                 and is_deleted = #{isDeleted}
             </if>
         </where>
-        limit #{pageable.offset}, #{pageable.pageSize}
     </select>
 
-    <!--统计总行数-->
-    <select id="count" resultType="java.lang.Long">
-        select count(1)
+    <select id="query" resultMap="AuthUserMap">
+        select
+        id, username, password, nickname, phone, email, sex, avatar, status, introduce, created_by, ext_json,
+        created_time, update_by, update_time, is_deleted
         from auth_user
         <where>
             <if test="id != null">
@@ -114,7 +112,7 @@
                 and username = #{username}
             </if>
             <if test="password != null and password != ''">
-                and password = #{password}
+                and `password` = #{password}
             </if>
             <if test="nickname != null and nickname != ''">
                 and nickname = #{nickname}
@@ -132,7 +130,7 @@
                 and avatar = #{avatar}
             </if>
             <if test="status != null">
-                and status = #{status}
+                and `status` = #{status}
             </if>
             <if test="introduce != null and introduce != ''">
                 and introduce = #{introduce}
