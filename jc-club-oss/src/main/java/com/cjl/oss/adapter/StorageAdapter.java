@@ -48,4 +48,6 @@ public interface StorageAdapter {
      * 删除文件
      */
     void deleteFile(String bucketName, String fileName);
+
+    String getUrl(String bucketName, String fileName);
 }

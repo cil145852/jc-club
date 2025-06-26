@@ -2,6 +2,7 @@ package com.cjl.oss.adapter;
 
 import com.cjl.oss.entity.FileInfo;
 import com.cjl.oss.util.MinioUtil;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,6 +19,12 @@ import java.util.List;
 public class MinioStorageAdapter implements StorageAdapter {
     @Resource
     private MinioUtil minioUtil;
+
+    /**
+     * minioUrl
+     */
+    @Value("${minio.url}")
+    private String url;
 
     @Override
     public void createBucket(String bucketName) {
@@ -85,5 +92,10 @@ public class MinioStorageAdapter implements StorageAdapter {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public String getUrl(String bucketName, String fileName) {
+        return url + "/" + bucketName + "/" + fileName;
     }
 }

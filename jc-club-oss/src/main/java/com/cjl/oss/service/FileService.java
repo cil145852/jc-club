@@ -2,6 +2,7 @@ package com.cjl.oss.service;
 
 import com.cjl.oss.adapter.StorageAdapter;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -21,5 +22,13 @@ public class FileService {
 
     public List<String> listAllBucket() {
         return storageAdapter.listAllBucket();
+    }
+
+    public String getUrl(String bucketName, String fileName) {
+        return storageAdapter.getUrl(bucketName, fileName);
+    }
+
+    public void uploadFile(MultipartFile multipartFile, String bucketName, String dirName) {
+        storageAdapter.uploadFile(multipartFile, bucketName, dirName);
     }
 }
