@@ -16,8 +16,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
-import java.util.*;
-import java.util.concurrent.FutureTask;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.stream.Collectors;
 
@@ -109,23 +111,20 @@ public class SubjectCategoryDomainServiceImpl implements SubjectCategoryDomainSe
                 .build();
         List<SubjectCategory> subjectCategoryList = subjectCategoryService.queryCategory(subjectCategory);
         List<SubjectCategoryBO> boList = SubjectCategoryConverter.INSTANCE.convertCategoryListToBoList(subjectCategoryList);
-        List<FutureTask<Map<Long, List<SubjectLabelBO>>>> futureTaskList = new ArrayList<>();
         Map<Long, List<SubjectLabelBO>> resultMap = new HashMap<>();
-        boList.forEach(bo -> {
-            FutureTask<Map<Long, List<SubjectLabelBO>>> futureTask = new FutureTask<>(() -> getLabelByCategoryId(bo.getId()));
-            futureTaskList.add(futureTask);
-            labelThreadPool.submit(futureTask);
-        });
-        for (FutureTask<Map<Long, List<SubjectLabelBO>>> futureTask : futureTaskList) {
+        List<CompletableFuture<Map<Long, List<SubjectLabelBO>>>> completableFutureList = boList.stream()
+                .map(bo -> CompletableFuture.supplyAsync(() -> getLabelByCategoryId(bo.getId()), labelThreadPool))
+                .collect(Collectors.toList());
+        completableFutureList.forEach(future -> {
             try {
-                Map<Long, List<SubjectLabelBO>> map = futureTask.get();
+                Map<Long, List<SubjectLabelBO>> map = future.get();
                 if (!CollectionUtils.isEmpty(map)) {
                     resultMap.putAll(map);
                 }
             } catch (Exception e) {
                 log.error("获取标签异常", e);
             }
-        }
+        });
         boList.forEach(bo -> {
             bo.setSubjectLabelBOList(resultMap.get(bo.getId()));
         });
