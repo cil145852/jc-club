@@ -4,6 +4,7 @@ import com.cjl.subject.common.enums.IsDeletedFlagEnum;
 import com.cjl.subject.domain.convert.SubjectCategoryConverter;
 import com.cjl.subject.domain.convert.SubjectLabelConverter;
 import com.cjl.subject.domain.entity.SubjectCategoryBO;
+import com.cjl.subject.domain.entity.SubjectLabelBO;
 import com.cjl.subject.domain.service.SubjectCategoryDomainService;
 import com.cjl.subject.infra.basic.entity.SubjectCategory;
 import com.cjl.subject.infra.basic.entity.SubjectMapping;
@@ -12,9 +13,12 @@ import com.cjl.subject.infra.basic.service.SubjectLabelService;
 import com.cjl.subject.infra.basic.service.SubjectMappingService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.FutureTask;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.stream.Collectors;
 
 /**
@@ -34,6 +38,9 @@ public class SubjectCategoryDomainServiceImpl implements SubjectCategoryDomainSe
 
     @Resource
     private SubjectLabelService subjectLabelService;
+
+    @Resource
+    private ThreadPoolExecutor labelThreadPool;
 
     /**
      * 添加分类
@@ -102,14 +109,40 @@ public class SubjectCategoryDomainServiceImpl implements SubjectCategoryDomainSe
                 .build();
         List<SubjectCategory> subjectCategoryList = subjectCategoryService.queryCategory(subjectCategory);
         List<SubjectCategoryBO> boList = SubjectCategoryConverter.INSTANCE.convertCategoryListToBoList(subjectCategoryList);
+        List<FutureTask<Map<Long, List<SubjectLabelBO>>>> futureTaskList = new ArrayList<>();
+        Map<Long, List<SubjectLabelBO>> resultMap = new HashMap<>();
         boList.forEach(bo -> {
-            //查询分类下的标签
-            SubjectMapping subjectMapping = new SubjectMapping();
-            subjectMapping.setCategoryId(bo.getId());
-            List<SubjectMapping> subjectMappingList = subjectMappingService.queryDistinctLabelId(subjectMapping);
-            List<Long> labelIds = subjectMappingList.stream().map(SubjectMapping::getLabelId).collect(Collectors.toList());
-            bo.setSubjectLabelBOList(SubjectLabelConverter.INSTANCE.convertListEntityToBoList(subjectLabelService.batchQueryByIds(labelIds)));
+            FutureTask<Map<Long, List<SubjectLabelBO>>> futureTask = new FutureTask<>(() -> getLabelByCategoryId(bo.getId()));
+            futureTaskList.add(futureTask);
+            labelThreadPool.submit(futureTask);
+        });
+        for (FutureTask<Map<Long, List<SubjectLabelBO>>> futureTask : futureTaskList) {
+            try {
+                Map<Long, List<SubjectLabelBO>> map = futureTask.get();
+                if (!CollectionUtils.isEmpty(map)) {
+                    resultMap.putAll(map);
+                }
+            } catch (Exception e) {
+                log.error("获取标签异常", e);
+            }
+        }
+        boList.forEach(bo -> {
+            bo.setSubjectLabelBOList(resultMap.get(bo.getId()));
         });
         return boList;
+    }
+
+    /**
+     * 根据分类id查询标签
+     */
+    private Map<Long, List<SubjectLabelBO>> getLabelByCategoryId(Long categoryId) {
+        //查询分类下的标签
+        SubjectMapping subjectMapping = new SubjectMapping();
+        subjectMapping.setCategoryId(categoryId);
+        List<SubjectMapping> subjectMappingList = subjectMappingService.queryDistinctLabelId(subjectMapping);
+        List<Long> labelIds = subjectMappingList.stream().map(SubjectMapping::getLabelId).collect(Collectors.toList());
+        Map<Long, List<SubjectLabelBO>> resultMap = new HashMap<>();
+        resultMap.put(categoryId, SubjectLabelConverter.INSTANCE.convertListEntityToBoList(subjectLabelService.batchQueryByIds(labelIds)));
+        return resultMap;
     }
 }
