@@ -1,6 +1,7 @@
 package com.cjl.oss.controller;
 
 import com.cjl.oss.service.FileService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +17,7 @@ import javax.annotation.Resource;
  * @CreateDate 2025-06-09-11:32
  * @Description
  */
+@Slf4j
 @RestController
 public class FileController {
     @Resource
@@ -28,7 +30,7 @@ public class FileController {
 
     @PostMapping("/upload")
     public String upload(
-            @RequestParam("multipartFile") MultipartFile multipartFile,
+            @RequestParam("uploadFile") MultipartFile multipartFile,
             @RequestParam("bucket") String bucketName,
             @RequestParam("objectName") String dirName) {
         fileService.uploadFile(multipartFile, bucketName, dirName);

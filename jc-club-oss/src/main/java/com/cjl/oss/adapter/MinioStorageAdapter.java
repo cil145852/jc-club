@@ -40,9 +40,9 @@ public class MinioStorageAdapter implements StorageAdapter {
         try {
             minioUtil.createBucket(bucketName);
             if (StringUtils.hasText(dirName)) {
-                minioUtil.uploadFile(multipartFile.getInputStream(), bucketName, dirName + "/" + multipartFile.getName());
+                minioUtil.uploadFile(multipartFile.getInputStream(), bucketName, dirName + "/" + multipartFile.getOriginalFilename());
             } else {
-                minioUtil.uploadFile(multipartFile.getInputStream(), bucketName, multipartFile.getName());
+                minioUtil.uploadFile(multipartFile.getInputStream(), bucketName, multipartFile.getOriginalFilename());
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
