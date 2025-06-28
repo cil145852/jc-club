@@ -1,5 +1,6 @@
 package com.cjl.subject.domain.service.Impl;
 
+import com.alibaba.fastjson.JSON;
 import com.cjl.subject.common.enums.IsDeletedFlagEnum;
 import com.cjl.subject.domain.convert.SubjectCategoryConverter;
 import com.cjl.subject.domain.convert.SubjectLabelConverter;
@@ -11,7 +12,10 @@ import com.cjl.subject.infra.basic.entity.SubjectMapping;
 import com.cjl.subject.infra.basic.service.SubjectCategoryService;
 import com.cjl.subject.infra.basic.service.SubjectLabelService;
 import com.cjl.subject.infra.basic.service.SubjectMappingService;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -21,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -43,6 +48,12 @@ public class SubjectCategoryDomainServiceImpl implements SubjectCategoryDomainSe
 
     @Resource
     private ThreadPoolExecutor labelThreadPool;
+
+    private Cache<String, String> localCache =
+            CacheBuilder.newBuilder()
+                    .maximumSize(5000)
+                    .expireAfterWrite(10, TimeUnit.SECONDS)
+                    .build();
 
     /**
      * 添加分类
@@ -104,9 +115,23 @@ public class SubjectCategoryDomainServiceImpl implements SubjectCategoryDomainSe
 
     @Override
     public List<SubjectCategoryBO> queryCategoryAndLabel(SubjectCategoryBO subjectCategoryBO) {
+        Long categoryId = subjectCategoryBO.getId();
+        String cacheKey = "categoryAndLabel." + categoryId;
+        String content = localCache.getIfPresent(cacheKey);
+        List<SubjectCategoryBO> boList;
+        if (StringUtils.isBlank(content)) {
+            boList = doQueryCategoryAndLabel(categoryId);
+            localCache.put(cacheKey, JSON.toJSONString(boList));
+        } else {
+            boList = JSON.parseArray(content, SubjectCategoryBO.class);
+        }
+        return boList;
+    }
+
+    private List<SubjectCategoryBO> doQueryCategoryAndLabel(Long categoryId) {
         //查找所以分类信息
         SubjectCategory subjectCategory = SubjectCategory.builder()
-                .parentId(subjectCategoryBO.getId())
+                .parentId(categoryId)
                 .isDeleted(IsDeletedFlagEnum.UN_DELETED.getCode())
                 .build();
         List<SubjectCategory> subjectCategoryList = subjectCategoryService.queryCategory(subjectCategory);
