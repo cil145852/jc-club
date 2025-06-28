@@ -2,9 +2,9 @@ package com.cjl.auth.application.controller;
 
 import com.cjl.auth.application.convert.AuthPermissionDTOConverter;
 import com.cjl.auth.application.dto.AuthPermissionDTO;
-import com.cjl.auth.common.entity.Result;
 import com.cjl.auth.domain.entity.AuthPermissionBO;
 import com.cjl.auth.domain.service.AuthPermissionDomainService;
+import com.cjl.auth.entity.Result;
 import com.google.common.base.Preconditions;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;

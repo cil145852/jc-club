@@ -1,4 +1,4 @@
-package com.cjl.auth.application.dto;
+package com.cjl.auth.entity;
 
 import lombok.Data;
 

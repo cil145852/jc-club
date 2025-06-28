@@ -1,6 +1,5 @@
-package com.cjl.auth.common.entity;
+package com.cjl.auth.entity;
 
-import com.cjl.auth.common.enums.ResultCodeEnum;
 import lombok.Data;
 
 /**

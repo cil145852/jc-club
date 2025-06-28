@@ -1,7 +1,7 @@
 package com.cjl.auth.application.convert;
 
-import com.cjl.auth.application.dto.AuthUserDTO;
 import com.cjl.auth.domain.entity.AuthUserBO;
+import com.cjl.auth.entity.AuthUserDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 

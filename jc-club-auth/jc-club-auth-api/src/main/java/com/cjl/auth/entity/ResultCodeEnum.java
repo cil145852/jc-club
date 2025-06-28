@@ -1,4 +1,4 @@
-package com.cjl.auth.common.enums;
+package com.cjl.auth.entity;
 
 import lombok.Getter;
 

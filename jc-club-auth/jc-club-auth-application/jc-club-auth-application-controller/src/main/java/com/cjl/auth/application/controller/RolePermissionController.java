@@ -2,9 +2,9 @@ package com.cjl.auth.application.controller;
 
 import com.cjl.auth.application.convert.AuthRolePermissionDTOConverter;
 import com.cjl.auth.application.dto.AuthRolePermissionDTO;
-import com.cjl.auth.common.entity.Result;
 import com.cjl.auth.domain.entity.AuthRolePermissionBO;
 import com.cjl.auth.domain.service.AuthRolePermissionDomainService;
+import com.cjl.auth.entity.Result;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

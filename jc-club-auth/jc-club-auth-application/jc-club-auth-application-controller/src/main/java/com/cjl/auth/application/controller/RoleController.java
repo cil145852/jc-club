@@ -2,9 +2,9 @@ package com.cjl.auth.application.controller;
 
 import com.cjl.auth.application.convert.AuthRoleDTOConverter;
 import com.cjl.auth.application.dto.AuthRoleDTO;
-import com.cjl.auth.common.entity.Result;
 import com.cjl.auth.domain.entity.AuthRoleBO;
 import com.cjl.auth.domain.service.AuthRoleDomainService;
+import com.cjl.auth.entity.Result;
 import com.google.common.base.Preconditions;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
