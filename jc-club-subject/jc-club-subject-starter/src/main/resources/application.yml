@@ -4,8 +4,8 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
-    password: HBTDa6OR6AqXXISrlRNR+A9yakLt2NnRmPQCjKCcowYRI6M7MxA2n2mxS0hlzJSmWQXAiXKddfeSa2DG+YAq9Q==
-    url: jdbc:mysql:///jc_club?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&useSSL=false
+    password: XYpJy5Xg0tjKeydqQAi2CdNZb94NBx0quKE5Aw2v/ntvG74zIw6c1ozd/f+rPKcPdFt6mlfcNS5aOySb2PJFJw==
+    url:
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
       initial-size: 20 # 数据库连接池的初始化大小
@@ -32,13 +32,18 @@ spring:
 # 密钥配置（建议从环境变量或安全配置中心获取）
 druid:
   decrypt:
-    key: MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAJP1FFh/B+5hTrqhzW91Fcxk9kyNNj7dtcmWbIv+O+WxxDkOwsI4wDydg+4zucDxmOUiowZ1DNtbeovXtIV1/wsCAwEAAQ==
+    key: MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBANWnnwZyMySAmBbKOg/HGYIXRLZKuPi7BQXydB23w7dZhWv6XMjgAob/E/dlxdXwBHNs3zbILp3gglxFUBwA/mkCAwEAAQ==
 
 mybatis-plus:
   configuration:
     map-underscore-to-camel-case: true
     auto-mapping-behavior: full
   mapper-locations: classpath*:/mapper/**/*.xml
-
 logging:
   config: classpath:log4j2-spring.xml
+
+es:
+  cluster:
+    es-configs:
+      - name:
+        nodes:
