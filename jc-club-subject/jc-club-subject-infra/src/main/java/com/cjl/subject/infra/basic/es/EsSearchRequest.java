@@ -1,7 +1,9 @@
 package com.cjl.subject.infra.basic.es;
 
+import lombok.Data;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
+import org.elasticsearch.search.sort.SortOrder;
 
 /**
  * @author liang
@@ -9,7 +11,7 @@ import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
  * @CreateDate 2025-07-16-9:04
  * @Description
  */
-
+@Data
 public class EsSearchRequest {
     /**
      * 查询条件
@@ -49,10 +51,14 @@ public class EsSearchRequest {
     /**
      * 排序方式
      */
-    private String sortOrder;
+    private SortOrder sortOrder;
 
     /**
      * 高亮规则builder
      */
     private HighlightBuilder highlightBuilder;
+
+    public Boolean isNeedScroll() {
+        return this.needScroll;
+    }
 }
