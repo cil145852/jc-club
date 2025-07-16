@@ -2,6 +2,7 @@ package com.cjl.subject.domain.service.Impl;
 
 import com.cjl.subject.common.entity.PageResult;
 import com.cjl.subject.common.enums.IsDeletedFlagEnum;
+import com.cjl.subject.common.util.IdWorkerUtil;
 import com.cjl.subject.domain.convert.SubjectInfoConverter;
 import com.cjl.subject.domain.entity.SubjectInfoBO;
 import com.cjl.subject.domain.entity.SubjectTypeBO;
@@ -9,8 +10,10 @@ import com.cjl.subject.domain.handler.subject.SubjectTypeHandler;
 import com.cjl.subject.domain.handler.subject.SubjectTypeHandlerFactory;
 import com.cjl.subject.domain.service.SubjectInfoDomainService;
 import com.cjl.subject.infra.basic.entity.SubjectInfo;
+import com.cjl.subject.infra.basic.entity.SubjectInfoEs;
 import com.cjl.subject.infra.basic.entity.SubjectLabel;
 import com.cjl.subject.infra.basic.entity.SubjectMapping;
+import com.cjl.subject.infra.basic.service.SubjectEsService;
 import com.cjl.subject.infra.basic.service.SubjectInfoService;
 import com.cjl.subject.infra.basic.service.SubjectLabelService;
 import com.cjl.subject.infra.basic.service.SubjectMappingService;
@@ -20,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,6 +47,9 @@ public class SubjectInfoDomainServiceImpl implements SubjectInfoDomainService {
 
     @Resource
     private SubjectLabelService subjectLabelService;
+
+    @Resource
+    private SubjectEsService subjectEsService;
 
     /**
      * 添加试题
@@ -77,6 +84,21 @@ public class SubjectInfoDomainServiceImpl implements SubjectInfoDomainService {
             });
         });
         subjectMappingService.batchInsert(subjectMappingList);
+
+        //插入题目后将题目信息同步到es
+        subjectEsService.insert(convert2SubjectInfoEs(subjectInfoBO));
+    }
+
+    private SubjectInfoEs convert2SubjectInfoEs(SubjectInfoBO subjectInfoBO) {
+        SubjectInfoEs subjectInfoEs = new SubjectInfoEs();
+        subjectInfoEs.setDocId(new IdWorkerUtil(1, 1, 1).nextId());
+        subjectInfoEs.setSubjectId(subjectInfoBO.getId());
+        subjectInfoEs.setSubjectName(subjectInfoBO.getSubjectName());
+        subjectInfoEs.setSubjectAnswer(subjectInfoBO.getSubjectAnswer());
+        subjectInfoEs.setSubjectType(subjectInfoBO.getSubjectType());
+        subjectInfoEs.setCreateTime(new Date().getTime());
+        subjectInfoEs.setCreateUser("cjl");
+        return subjectInfoEs;
     }
 
     /**
