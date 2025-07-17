@@ -1,6 +1,7 @@
 package com.cjl.subject.application.interceptor;
 
-import com.cjl.subject.application.context.LoginContextHolder;
+import com.cjl.subject.common.context.LoginContextHolder;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,7 +23,10 @@ public class LoginInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        LoginContextHolder.set(LOGIN_HEADER, request.getHeader(LOGIN_HEADER));
+        String loginId = request.getHeader(LOGIN_HEADER);
+        if (StringUtils.isNotBlank(loginId)) {
+            LoginContextHolder.set(LOGIN_HEADER, loginId);
+        }
         return true;
     }
 }

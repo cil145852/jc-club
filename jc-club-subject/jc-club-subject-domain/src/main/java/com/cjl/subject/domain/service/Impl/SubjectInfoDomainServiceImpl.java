@@ -62,7 +62,6 @@ public class SubjectInfoDomainServiceImpl implements SubjectInfoDomainService {
     public void add(SubjectInfoBO subjectInfoBO) {
         //先插入subject_info表
         SubjectInfo subjectInfo = SubjectInfoConverter.INSTANCE.convertBOToEntity(subjectInfoBO);
-        subjectInfo.setIsDeleted(IsDeletedFlagEnum.UN_DELETED.getCode());
         subjectInfoService.insert(subjectInfo);
 
         subjectInfoBO.setId(subjectInfo.getId());

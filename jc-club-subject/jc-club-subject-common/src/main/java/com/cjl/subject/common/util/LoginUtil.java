@@ -1,6 +1,6 @@
-package com.cjl.subject.application.util;
+package com.cjl.subject.common.util;
 
-import com.cjl.subject.application.context.LoginContextHolder;
+import com.cjl.subject.common.context.LoginContextHolder;
 
 /**
  * @author liang
