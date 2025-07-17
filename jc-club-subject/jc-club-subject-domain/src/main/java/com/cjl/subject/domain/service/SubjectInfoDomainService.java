@@ -3,6 +3,8 @@ package com.cjl.subject.domain.service;
 import com.cjl.subject.common.entity.PageResult;
 import com.cjl.subject.domain.entity.SubjectInfoBO;
 
+import java.util.List;
+
 /**
  * @author liang
  * @version 1.0
@@ -19,4 +21,6 @@ public interface SubjectInfoDomainService {
     SubjectInfoBO querySubjectInfo(SubjectInfoBO subjectInfoBO);
 
     PageResult<SubjectInfoBO> getSubjectPageBySearch(SubjectInfoBO subjectInfoBO);
+
+    List<SubjectInfoBO> getContributeList();
 }

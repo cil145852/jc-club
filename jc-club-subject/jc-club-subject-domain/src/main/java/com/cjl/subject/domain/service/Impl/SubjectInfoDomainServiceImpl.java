@@ -1,13 +1,16 @@
 package com.cjl.subject.domain.service.Impl;
 
+import com.alibaba.fastjson.JSON;
 import com.cjl.subject.common.entity.PageResult;
 import com.cjl.subject.common.enums.IsDeletedFlagEnum;
 import com.cjl.subject.common.util.IdWorkerUtil;
+import com.cjl.subject.common.util.LoginUtil;
 import com.cjl.subject.domain.convert.SubjectInfoConverter;
 import com.cjl.subject.domain.entity.SubjectInfoBO;
 import com.cjl.subject.domain.entity.SubjectTypeBO;
 import com.cjl.subject.domain.handler.subject.SubjectTypeHandler;
 import com.cjl.subject.domain.handler.subject.SubjectTypeHandlerFactory;
+import com.cjl.subject.domain.redis.RedisUtil;
 import com.cjl.subject.domain.service.SubjectInfoDomainService;
 import com.cjl.subject.infra.basic.entity.SubjectInfo;
 import com.cjl.subject.infra.basic.entity.SubjectInfoEs;
@@ -17,14 +20,16 @@ import com.cjl.subject.infra.basic.service.SubjectEsService;
 import com.cjl.subject.infra.basic.service.SubjectInfoService;
 import com.cjl.subject.infra.basic.service.SubjectLabelService;
 import com.cjl.subject.infra.basic.service.SubjectMappingService;
+import com.cjl.subject.infra.entity.UserInfo;
+import com.cjl.subject.infra.rpc.UserRPC;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -50,6 +55,14 @@ public class SubjectInfoDomainServiceImpl implements SubjectInfoDomainService {
 
     @Resource
     private SubjectEsService subjectEsService;
+
+    @Resource
+    private RedisUtil redisUtil;
+
+    private static final String RANK_KEY = "subject_rank";
+
+    @Resource
+    private UserRPC userRPC;
 
     /**
      * 添加试题
@@ -86,6 +99,9 @@ public class SubjectInfoDomainServiceImpl implements SubjectInfoDomainService {
 
         //插入题目后将题目信息同步到es
         subjectEsService.insert(convert2SubjectInfoEs(subjectInfoBO));
+
+        //修改排行榜数据
+        redisUtil.addScore(RANK_KEY, LoginUtil.getLoginId(), 1);
     }
 
     private SubjectInfoEs convert2SubjectInfoEs(SubjectInfoBO subjectInfoBO) {
@@ -163,5 +179,27 @@ public class SubjectInfoDomainServiceImpl implements SubjectInfoDomainService {
         PageResult<SubjectInfoBO> boPageResult = new PageResult<>();
         boPageResult.setRecords(SubjectInfoConverter.INSTANCE.convertListEsEntityToBO(pageResult.getResult()));
         return boPageResult;
+    }
+
+    @Override
+    public List<SubjectInfoBO> getContributeList() {
+        Set<ZSetOperations.TypedTuple<String>> typedTuples = redisUtil.rankWithScore(RANK_KEY, 0, 10);
+        if (log.isInfoEnabled()) {
+            log.info("SubjectInfoDomainServiceImpl.getContributeList.typedTuples:{}", JSON.toJSONString(typedTuples));
+        }
+        if (CollectionUtils.isEmpty(typedTuples)) {
+            return Collections.emptyList();
+        }
+        return typedTuples.stream()
+                .map(rank -> {
+                    SubjectInfoBO subjectInfoBO = new SubjectInfoBO();
+                    subjectInfoBO.setSubjectCount(rank.getScore().intValue());
+                    String username = rank.getValue();
+                    UserInfo userInfo = userRPC.getUserInfo(username);
+                    subjectInfoBO.setCreateUser(userInfo.getNickname());
+                    subjectInfoBO.setCreateUserAvatar(userInfo.getAvatar());
+                    return subjectInfoBO;
+                })
+                .collect(Collectors.toList());
     }
 }

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @author liang
@@ -43,7 +44,7 @@ public class SubjectController {
             if (log.isInfoEnabled()) {
                 log.info("SubjectController.add.SubjectInfoDTO:{}", JSON.toJSONString(subjectInfoDTO));
             }
-            SubjectInfoBO subjectInfoBO = SubjectInfoDTOConverter.INSTANCE.convertDtoToBo(subjectInfoDTO);
+            SubjectInfoBO subjectInfoBO = SubjectInfoDTOConverter.INSTANCE.convertDTOToBO(subjectInfoDTO);
             subjectInfoBO.setOptionList(SubjectOptionDTOConverter.INSTANCE.convertListDtoToBo(subjectInfoDTO.getOptionList()));
             subjectInfoDomainService.add(subjectInfoBO);
             return Result.ok(true);
@@ -55,18 +56,18 @@ public class SubjectController {
 
     @PostMapping("/getSubjectPage")
     public Result<PageResult<SubjectInfoDTO>> getSubjectPage(@RequestBody SubjectInfoDTO subjectInfoDTO) {
-        SubjectInfoBO subjectInfoBO = SubjectInfoDTOConverter.INSTANCE.convertDtoToBo(subjectInfoDTO);
+        SubjectInfoBO subjectInfoBO = SubjectInfoDTOConverter.INSTANCE.convertDTOToBO(subjectInfoDTO);
         PageResult<SubjectInfoBO> boPageResult = subjectInfoDomainService.getSubjectPage(subjectInfoBO);
         PageResult<SubjectInfoDTO> dtoPageResult = new PageResult<>();
-        dtoPageResult.setRecords(SubjectInfoDTOConverter.INSTANCE.convertListBoToDto(boPageResult.getResult()));
+        dtoPageResult.setRecords(SubjectInfoDTOConverter.INSTANCE.convertListBOToDTO(boPageResult.getResult()));
         return Result.ok(dtoPageResult);
     }
 
     @PostMapping("/querySubjectInfo")
     public Result<SubjectInfoDTO> querySubjectInfo(@RequestBody SubjectInfoDTO subjectInfoDTO) {
-        SubjectInfoBO subjectInfoBO = SubjectInfoDTOConverter.INSTANCE.convertDtoToBo(subjectInfoDTO);
+        SubjectInfoBO subjectInfoBO = SubjectInfoDTOConverter.INSTANCE.convertDTOToBO(subjectInfoDTO);
         subjectInfoBO = subjectInfoDomainService.querySubjectInfo(subjectInfoBO);
-        SubjectInfoDTO dto = SubjectInfoDTOConverter.INSTANCE.convertBoToDto(subjectInfoBO);
+        SubjectInfoDTO dto = SubjectInfoDTOConverter.INSTANCE.convertBOToDTO(subjectInfoBO);
         return Result.ok(dto);
     }
 
@@ -80,16 +81,29 @@ public class SubjectController {
                 log.info("SubjectController.getSubjectPageBySearch.SubjectInfoDTO:{}", JSON.toJSONString(subjectInfoDTO));
             }
             Preconditions.checkArgument(StringUtils.isNotBlank(subjectInfoDTO.getKeyWord()), "搜索关键字不能为空");
-            SubjectInfoBO subjectInfoBO = SubjectInfoDTOConverter.INSTANCE.convertDtoToBo(subjectInfoDTO);
+            SubjectInfoBO subjectInfoBO = SubjectInfoDTOConverter.INSTANCE.convertDTOToBO(subjectInfoDTO);
             subjectInfoBO.setPageNo(subjectInfoDTO.getPageNo());
             subjectInfoBO.setPageSize(subjectInfoDTO.getPageSize());
             PageResult<SubjectInfoBO> boPageResult = subjectInfoDomainService.getSubjectPageBySearch(subjectInfoBO);
             PageResult<SubjectInfoDTO> pageResult = new PageResult<>();
-            pageResult.setRecords(SubjectInfoDTOConverter.INSTANCE.convertListBoToDto(boPageResult.getResult()));
+            pageResult.setRecords(SubjectInfoDTOConverter.INSTANCE.convertListBOToDTO(boPageResult.getResult()));
             return Result.ok(pageResult);
         } catch (Exception e) {
             log.error("SubjectController.getSubjectPageBySearch.error:{}", e.getMessage(), e);
             return Result.fail(null);
         }
     }
+
+    @PostMapping("/getContributeList")
+    public Result<List<SubjectInfoDTO>> getContributeList() {
+        try {
+            List<SubjectInfoBO> subjectInfoBOList = subjectInfoDomainService.getContributeList();
+            List<SubjectInfoDTO> subjectInfoDTOList = SubjectInfoDTOConverter.INSTANCE.convertListBOToDTO(subjectInfoBOList);
+            return Result.ok(subjectInfoDTOList);
+        } catch (Exception e) {
+            log.error("获取贡献榜失败:SubjectController.getContributeList.error:{}", e.getMessage(), e);
+            return Result.fail(null);
+        }
+    }
+
 }

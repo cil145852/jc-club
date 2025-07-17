@@ -17,9 +17,9 @@ import java.util.List;
 public interface SubjectInfoDTOConverter {
     SubjectInfoDTOConverter INSTANCE = Mappers.getMapper(SubjectInfoDTOConverter.class);
 
-    SubjectInfoBO convertDtoToBo(SubjectInfoDTO subjectInfoDTO);
+    SubjectInfoBO convertDTOToBO(SubjectInfoDTO subjectInfoDTO);
 
-    List<SubjectInfoDTO> convertListBoToDto(List<SubjectInfoBO> subjectInfoBOList);
+    List<SubjectInfoDTO> convertListBOToDTO(List<SubjectInfoBO> subjectInfoBOList);
 
-    SubjectInfoDTO convertBoToDto(SubjectInfoBO subjectInfoBO);
+    SubjectInfoDTO convertBOToDTO(SubjectInfoBO subjectInfoBO);
 }
