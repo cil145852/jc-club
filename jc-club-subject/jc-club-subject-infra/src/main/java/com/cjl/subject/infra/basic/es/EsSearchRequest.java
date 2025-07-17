@@ -1,6 +1,9 @@
 package com.cjl.subject.infra.basic.es;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.elasticsearch.search.sort.SortOrder;
@@ -12,6 +15,9 @@ import org.elasticsearch.search.sort.SortOrder;
  * @Description
  */
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class EsSearchRequest {
     /**
      * 查询条件

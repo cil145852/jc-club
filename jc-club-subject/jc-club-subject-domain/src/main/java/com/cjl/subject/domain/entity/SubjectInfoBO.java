@@ -4,6 +4,7 @@ import com.cjl.subject.common.entity.PageInfo;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -71,4 +72,18 @@ public class SubjectInfoBO extends PageInfo implements Serializable {
      * 标签id
      */
     private Long labelId;
+    /**
+     * es搜索关键字
+     */
+    private String keyWord;
+
+    /**
+     * es搜索分数
+     */
+    private BigDecimal score;
+
+    /**
+     * es文档id
+     */
+    private Long docId;
 }

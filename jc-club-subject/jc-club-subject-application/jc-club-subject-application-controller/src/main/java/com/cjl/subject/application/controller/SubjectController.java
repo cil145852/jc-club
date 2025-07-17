@@ -8,7 +8,9 @@ import com.cjl.subject.common.entity.PageResult;
 import com.cjl.subject.common.entity.Result;
 import com.cjl.subject.domain.entity.SubjectInfoBO;
 import com.cjl.subject.domain.service.SubjectInfoDomainService;
+import com.google.common.base.Preconditions;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -66,5 +68,28 @@ public class SubjectController {
         subjectInfoBO = subjectInfoDomainService.querySubjectInfo(subjectInfoBO);
         SubjectInfoDTO dto = SubjectInfoDTOConverter.INSTANCE.convertBoToDto(subjectInfoBO);
         return Result.ok(dto);
+    }
+
+    /**
+     * es全文检索
+     */
+    @PostMapping("/getSubjectPageBySearch")
+    public Result<PageResult<SubjectInfoDTO>> getSubjectPageBySearch(@RequestBody SubjectInfoDTO subjectInfoDTO) {
+        try {
+            if (log.isInfoEnabled()) {
+                log.info("SubjectController.getSubjectPageBySearch.SubjectInfoDTO:{}", JSON.toJSONString(subjectInfoDTO));
+            }
+            Preconditions.checkArgument(StringUtils.isNotBlank(subjectInfoDTO.getKeyWord()), "搜索关键字不能为空");
+            SubjectInfoBO subjectInfoBO = SubjectInfoDTOConverter.INSTANCE.convertDtoToBo(subjectInfoDTO);
+            subjectInfoBO.setPageNo(subjectInfoDTO.getPageNo());
+            subjectInfoBO.setPageSize(subjectInfoDTO.getPageSize());
+            PageResult<SubjectInfoBO> boPageResult = subjectInfoDomainService.getSubjectPageBySearch(subjectInfoBO);
+            PageResult<SubjectInfoDTO> pageResult = new PageResult<>();
+            pageResult.setRecords(SubjectInfoDTOConverter.INSTANCE.convertListBoToDto(boPageResult.getResult()));
+            return Result.ok(pageResult);
+        } catch (Exception e) {
+            log.error("SubjectController.getSubjectPageBySearch.error:{}", e.getMessage(), e);
+            return Result.fail(null);
+        }
     }
 }

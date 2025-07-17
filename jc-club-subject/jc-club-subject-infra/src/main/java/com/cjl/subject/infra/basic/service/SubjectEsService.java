@@ -14,5 +14,5 @@ public interface SubjectEsService {
 
     Boolean insert(SubjectInfoEs subjectInfoEs);
 
-    PageResult<SubjectInfoEs> querySubjectList(SubjectInfoEs subjectInfoEs);
+    PageResult<SubjectInfoEs> querySubjectList(SubjectInfoEs req);
 }

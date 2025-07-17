@@ -44,7 +44,7 @@ public class Result<T> {
     }
     public static <T> Result<T> fail(T data) {
         Result<T> result = new Result<>();
-        ResultCodeEnum  failCode = ResultCodeEnum.SUCCESS;
+        ResultCodeEnum  failCode = ResultCodeEnum.FAIL;
         result.setCode(failCode.getCode());
         result.setMessage(failCode.getDesc());
         result.setSuccess(false);

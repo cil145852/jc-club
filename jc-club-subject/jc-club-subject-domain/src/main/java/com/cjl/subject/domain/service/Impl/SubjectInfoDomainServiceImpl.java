@@ -61,7 +61,7 @@ public class SubjectInfoDomainServiceImpl implements SubjectInfoDomainService {
     @Transactional(rollbackFor = Exception.class)
     public void add(SubjectInfoBO subjectInfoBO) {
         //先插入subject_info表
-        SubjectInfo subjectInfo = SubjectInfoConverter.INSTANCE.convertBoToEntity(subjectInfoBO);
+        SubjectInfo subjectInfo = SubjectInfoConverter.INSTANCE.convertBOToEntity(subjectInfoBO);
         subjectInfo.setIsDeleted(IsDeletedFlagEnum.UN_DELETED.getCode());
         subjectInfoService.insert(subjectInfo);
 
@@ -113,14 +113,14 @@ public class SubjectInfoDomainServiceImpl implements SubjectInfoDomainService {
         pageResult.setPageNo(subjectInfoBO.getPageNo());
         pageResult.setPageSize(subjectInfoBO.getPageSize());
         Integer start = (subjectInfoBO.getPageNo() - 1) * subjectInfoBO.getPageSize();
-        SubjectInfo subjectInfo = SubjectInfoConverter.INSTANCE.convertBoToEntity(subjectInfoBO);
+        SubjectInfo subjectInfo = SubjectInfoConverter.INSTANCE.convertBOToEntity(subjectInfoBO);
         Integer count = subjectInfoService.countByCondition(subjectInfo, subjectInfoBO.getCategoryId(), subjectInfoBO.getLabelId());
         if (count == 0) {
             return pageResult;
         }
         List<SubjectInfo> subjectInfoList = subjectInfoService.queryPage(subjectInfo, subjectInfoBO.getCategoryId(),
                 subjectInfoBO.getLabelId(), start, subjectInfoBO.getPageSize());
-        List<SubjectInfoBO> subjectInfoBOList = SubjectInfoConverter.INSTANCE.convertListEntityToBo(subjectInfoList);
+        List<SubjectInfoBO> subjectInfoBOList = SubjectInfoConverter.INSTANCE.convertListEntityToBO(subjectInfoList);
         pageResult.setRecords(subjectInfoBOList);
         pageResult.setTotal(count);
         return pageResult;
@@ -134,11 +134,11 @@ public class SubjectInfoDomainServiceImpl implements SubjectInfoDomainService {
      */
     @Override
     public SubjectInfoBO querySubjectInfo(SubjectInfoBO subjectInfoBO) {
-        SubjectInfo subjectInfo = SubjectInfoConverter.INSTANCE.convertBoToEntity(subjectInfoBO);
+        SubjectInfo subjectInfo = SubjectInfoConverter.INSTANCE.convertBOToEntity(subjectInfoBO);
         subjectInfo = subjectInfoService.queryById(subjectInfo.getId());
         SubjectTypeHandler subjectTypeHandler = subjectTypeHandlerFactory.getSubjectTypeHandler(subjectInfo.getSubjectType());
         SubjectTypeBO subjectTypeBO = subjectTypeHandler.query(subjectInfo.getId());
-        subjectInfoBO = SubjectInfoConverter.INSTANCE.convertEntityToBo(subjectInfo);
+        subjectInfoBO = SubjectInfoConverter.INSTANCE.convertEntityToBO(subjectInfo);
         subjectInfoBO.setOptionList(subjectTypeBO.getOptionList());
         subjectInfoBO.setSubjectAnswer(subjectTypeBO.getSubjectAnswer());
         SubjectMapping subjectMapping = new SubjectMapping();
@@ -155,5 +155,14 @@ public class SubjectInfoDomainServiceImpl implements SubjectInfoDomainService {
                 .collect(Collectors.toList());
         subjectInfoBO.setLabelName(labelName);
         return subjectInfoBO;
+    }
+
+    @Override
+    public PageResult<SubjectInfoBO> getSubjectPageBySearch(SubjectInfoBO subjectInfoBO) {
+        SubjectInfoEs req = SubjectInfoConverter.INSTANCE.convertBOToEsEntity(subjectInfoBO);
+        PageResult<SubjectInfoEs> pageResult = subjectEsService.querySubjectList(req);
+        PageResult<SubjectInfoBO> boPageResult = new PageResult<>();
+        boPageResult.setRecords(SubjectInfoConverter.INSTANCE.convertListEsEntityToBO(pageResult.getResult()));
+        return boPageResult;
     }
 }
