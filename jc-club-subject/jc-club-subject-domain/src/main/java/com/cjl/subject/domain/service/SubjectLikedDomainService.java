@@ -20,12 +20,12 @@ public interface SubjectLikedDomainService {
     /**
      * 获取当前是否被点赞过
      */
-    Boolean isLiked(String subjectId, String userId);
+    Boolean isLiked(Long subjectId, String userId);
 
     /**
      * 获取点赞数量
      */
-    Integer getLikedCount(String subjectId);
+    Integer getLikedCount(Long subjectId);
 
     /**
      * 更新 题目点赞表 信息

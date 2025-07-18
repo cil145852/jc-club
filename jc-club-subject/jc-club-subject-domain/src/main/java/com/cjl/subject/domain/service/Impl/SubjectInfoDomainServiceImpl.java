@@ -12,6 +12,7 @@ import com.cjl.subject.domain.handler.subject.SubjectTypeHandler;
 import com.cjl.subject.domain.handler.subject.SubjectTypeHandlerFactory;
 import com.cjl.subject.domain.redis.RedisUtil;
 import com.cjl.subject.domain.service.SubjectInfoDomainService;
+import com.cjl.subject.domain.service.SubjectLikedDomainService;
 import com.cjl.subject.infra.basic.entity.SubjectInfo;
 import com.cjl.subject.infra.basic.entity.SubjectInfoEs;
 import com.cjl.subject.infra.basic.entity.SubjectLabel;
@@ -55,6 +56,9 @@ public class SubjectInfoDomainServiceImpl implements SubjectInfoDomainService {
 
     @Resource
     private SubjectEsService subjectEsService;
+
+    @Resource
+    private SubjectLikedDomainService subjectLikedDomainService;
 
     @Resource
     private RedisUtil redisUtil;
@@ -169,6 +173,10 @@ public class SubjectInfoDomainServiceImpl implements SubjectInfoDomainService {
                 .map(SubjectLabel::getLabelName)
                 .collect(Collectors.toList());
         subjectInfoBO.setLabelName(labelName);
+
+        //设置点赞相关属性
+        subjectInfoBO.setLiked(subjectLikedDomainService.isLiked(subjectInfoBO.getId(), LoginUtil.getLoginId()));
+        subjectInfoBO.setSubjectCount(subjectLikedDomainService.getLikedCount(subjectInfoBO.getId()));
         return subjectInfoBO;
     }
 

@@ -114,7 +114,7 @@ public class RedisUtil {
     }
 
     public Integer getInt(String key) {
-        return Integer.parseInt(get(key));
+        return (Integer) redisTemplate.opsForValue().get(key);
     }
 
     public void increment(String key, long delta) {

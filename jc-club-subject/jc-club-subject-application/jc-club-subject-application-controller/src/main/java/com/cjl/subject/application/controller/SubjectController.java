@@ -65,10 +65,16 @@ public class SubjectController {
 
     @PostMapping("/querySubjectInfo")
     public Result<SubjectInfoDTO> querySubjectInfo(@RequestBody SubjectInfoDTO subjectInfoDTO) {
-        SubjectInfoBO subjectInfoBO = SubjectInfoDTOConverter.INSTANCE.convertDTOToBO(subjectInfoDTO);
-        subjectInfoBO = subjectInfoDomainService.querySubjectInfo(subjectInfoBO);
-        SubjectInfoDTO dto = SubjectInfoDTOConverter.INSTANCE.convertBOToDTO(subjectInfoBO);
-        return Result.ok(dto);
+        try {
+            Preconditions.checkNotNull(subjectInfoDTO.getId(), "题目id不能为空");
+            SubjectInfoBO subjectInfoBO = SubjectInfoDTOConverter.INSTANCE.convertDTOToBO(subjectInfoDTO);
+            subjectInfoBO = subjectInfoDomainService.querySubjectInfo(subjectInfoBO);
+            SubjectInfoDTO dto = SubjectInfoDTOConverter.INSTANCE.convertBOToDTO(subjectInfoBO);
+            return Result.ok(dto);
+        } catch (Exception e) {
+            log.info("查询题目失败:SubjectController.querySubjectInfo.error:{}", e.getMessage(), e);
+            return Result.fail(null);
+        }
     }
 
     /**

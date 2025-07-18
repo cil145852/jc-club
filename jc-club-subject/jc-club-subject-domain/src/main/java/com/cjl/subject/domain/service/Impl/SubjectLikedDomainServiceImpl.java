@@ -32,6 +32,7 @@ public class SubjectLikedDomainServiceImpl implements SubjectLikedDomainService 
 
     @Resource
     private SubjectLikedService subjectLikedService;
+
     @Override
     public void add(SubjectLikedBO subjectLikedBO) {
         Long subjectId = subjectLikedBO.getSubjectId();
@@ -55,13 +56,16 @@ public class SubjectLikedDomainServiceImpl implements SubjectLikedDomainService 
     }
 
     @Override
-    public Boolean isLiked(String subjectId, String userId) {
-        return null;
+    public Boolean isLiked(Long subjectId, String userId) {
+        String key = SUBJECT_LIKED_DETAIL_KEY + "." + subjectId + "." + userId;
+        return redisUtil.exist(key);
     }
 
     @Override
-    public Integer getLikedCount(String subjectId) {
-        return 0;
+    public Integer getLikedCount(Long subjectId) {
+        String countKey = SUBJECT_LIKED_COUNT_KEY + "." + subjectId;
+        Integer count = redisUtil.getInt(countKey);
+        return count == null || count <= 0 ? 0 : count;
     }
 
     @Override
