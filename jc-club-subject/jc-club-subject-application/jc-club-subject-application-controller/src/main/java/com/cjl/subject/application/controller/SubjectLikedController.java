@@ -25,7 +25,7 @@ import javax.annotation.Resource;
  */
 
 @RestController
-@RequestMapping("/subjectLiked/")
+@RequestMapping("/subjectLiked")
 @Slf4j
 public class SubjectLikedController {
 
@@ -35,7 +35,7 @@ public class SubjectLikedController {
     /**
      * 新增题目点赞表
      */
-    @RequestMapping("add")
+    @RequestMapping("/add")
     public Result<Boolean> add(@RequestBody SubjectLikedDTO subjectLikedDTO) {
 
         try {
@@ -83,7 +83,7 @@ public class SubjectLikedController {
     /**
      * 修改题目点赞表
      */
-    @RequestMapping("update")
+    @RequestMapping("/update")
     public Result<Boolean> update(@RequestBody SubjectLikedDTO subjectLikedDTO) {
 
         try {
@@ -106,7 +106,7 @@ public class SubjectLikedController {
     /**
      * 删除题目点赞表
      */
-    @RequestMapping("delete")
+    @RequestMapping("/delete")
     public Result<Boolean> delete(@RequestBody SubjectLikedDTO subjectLikedDTO) {
 
         try {

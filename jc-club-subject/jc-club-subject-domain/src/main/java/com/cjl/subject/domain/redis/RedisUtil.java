@@ -108,4 +108,16 @@ public class RedisUtil {
     public Set<ZSetOperations.TypedTuple<String>> rankWithScore(String key, long start, long end) {
         return  redisTemplate.opsForZSet().reverseRangeWithScores(key, start, end);
     }
+
+    public void putHash(String key, String hashKey, Object hashValue) {
+        redisTemplate.opsForHash().put(key, hashKey, hashValue);
+    }
+
+    public Integer getInt(String key) {
+        return Integer.parseInt(get(key));
+    }
+
+    public void increment(String key, long delta) {
+        redisTemplate.opsForValue().increment(key, delta);
+    }
 }
