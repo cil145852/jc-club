@@ -50,4 +50,6 @@ public interface SubjectInfoService {
     Integer countByCondition(SubjectInfo subjectInfo, Long categoryId, Long labelId);
 
     List<SubjectInfo> queryPage(SubjectInfo subjectInfo, Long categoryId, Long labelId, Integer start, Integer pageSize);
+
+    Long querySubjectIdCursor(Long subjectId, Long categoryId, Long labelId, int cursor);
 }

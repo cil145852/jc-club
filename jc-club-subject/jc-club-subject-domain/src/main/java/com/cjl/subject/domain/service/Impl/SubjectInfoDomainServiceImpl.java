@@ -154,10 +154,14 @@ public class SubjectInfoDomainServiceImpl implements SubjectInfoDomainService {
     @Override
     public SubjectInfoBO querySubjectInfo(SubjectInfoBO subjectInfoBO) {
         SubjectInfo subjectInfo = SubjectInfoConverter.INSTANCE.convertBOToEntity(subjectInfoBO);
+        Long categoryId = subjectInfoBO.getCategoryId();
+        Long labelId = subjectInfoBO.getLabelId();
         subjectInfo = subjectInfoService.queryById(subjectInfo.getId());
         SubjectTypeHandler subjectTypeHandler = subjectTypeHandlerFactory.getSubjectTypeHandler(subjectInfo.getSubjectType());
         SubjectTypeBO subjectTypeBO = subjectTypeHandler.query(subjectInfo.getId());
         subjectInfoBO = SubjectInfoConverter.INSTANCE.convertEntityToBO(subjectInfo);
+        subjectInfoBO.setCategoryId(categoryId);
+        subjectInfoBO.setLabelId(labelId);
         subjectInfoBO.setOptionList(subjectTypeBO.getOptionList());
         subjectInfoBO.setSubjectAnswer(subjectTypeBO.getSubjectAnswer());
         SubjectMapping subjectMapping = new SubjectMapping();
@@ -177,7 +181,22 @@ public class SubjectInfoDomainServiceImpl implements SubjectInfoDomainService {
         //设置点赞相关属性
         subjectInfoBO.setLiked(subjectLikedDomainService.isLiked(subjectInfoBO.getId(), LoginUtil.getLoginId()));
         subjectInfoBO.setSubjectCount(subjectLikedDomainService.getLikedCount(subjectInfoBO.getId()));
+
+        assembleSubjectCursor(subjectInfoBO);
         return subjectInfoBO;
+    }
+
+    //设置题目下一题、上一题
+    private void assembleSubjectCursor(SubjectInfoBO subjectInfoBO) {
+        log.info("assembleSubjectCursor.bo:{}", JSON.toJSONString(subjectInfoBO));
+        Long categoryId = subjectInfoBO.getCategoryId();
+        Long labelId = subjectInfoBO.getLabelId();
+        Long subjectId = subjectInfoBO.getId();
+        if (Objects.isNull(labelId) || Objects.isNull(categoryId)) {
+            return;
+        }
+        subjectInfoBO.setNextSubjectId(subjectInfoService.querySubjectIdCursor(subjectId, categoryId, labelId, 1));
+        subjectInfoBO.setLastSubjectId(subjectInfoService.querySubjectIdCursor(subjectId, categoryId, labelId, 0));
     }
 
     @Override

@@ -157,6 +157,20 @@ id, subject_name, subject_difficult, settle_name, subject_type, subject_score, s
         </if>
         limit #{start},#{pageSize}
     </select>
+    <select id="querySubjectIdCursor" resultType="java.lang.Long">
+        SELECT *
+        FROM `subject_info` AS `info`
+        INNER JOIN `subject_mapping` AS `mapping` ON info.id = mapping.subject_id
+        WHERE mapping.category_id = #{categoryId}
+        AND mapping.label_id = #{labelId}
+        <if test="cursor != null and cursor == 1">
+            AND info.id > #{subjectId}
+        </if>
+        <if test="cursor != null and cursor == 0">
+            AND info.id &lt; #{subjectId}
+        </if>
+        LIMIT 0,1
+    </select>
 
     <!--新增所有列-->
     <insert id="insert" keyProperty="id" useGeneratedKeys="true">
