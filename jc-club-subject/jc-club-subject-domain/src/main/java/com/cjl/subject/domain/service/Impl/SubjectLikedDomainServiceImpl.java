@@ -1,15 +1,21 @@
 package com.cjl.subject.domain.service.Impl;
 
+import com.alibaba.fastjson.JSON;
 import com.cjl.subject.common.entity.PageResult;
 import com.cjl.subject.common.enums.SubjectLikedStatusEnum;
 import com.cjl.subject.domain.entity.SubjectLikedBO;
 import com.cjl.subject.domain.redis.RedisUtil;
 import com.cjl.subject.domain.service.SubjectLikedDomainService;
+import com.cjl.subject.infra.basic.entity.SubjectLiked;
 import com.cjl.subject.infra.basic.service.SubjectLikedService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.MapUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author liang
@@ -80,7 +86,28 @@ public class SubjectLikedDomainServiceImpl implements SubjectLikedDomainService 
 
     @Override
     public void syncLiked() {
-
+        Map<Object, Object> subjectLikedMap = redisUtil.getHashAndDelete(SUBJECT_LIKED_KEY);
+        if (log.isInfoEnabled()) {
+            log.info("syncLiked.subjectLikedMap:{}", JSON.toJSONString(subjectLikedMap));
+        }
+        if (MapUtils.isEmpty(subjectLikedMap)) {
+            return;
+        }
+        List<SubjectLiked> subjectLikedList = new ArrayList<>();
+        subjectLikedMap.forEach((key, value) -> {
+            SubjectLiked subjectLiked = new SubjectLiked();
+            String[] keyArr = key.toString().split(":");
+            if (keyArr.length != 2) {
+                throw new RuntimeException("Invalid subjectLiked key: " + key);
+            }
+            String subjectId = keyArr[0];
+            String likedUser = keyArr[1];
+            subjectLiked.setLikeUserId(likedUser);
+            subjectLiked.setSubjectId(Long.valueOf(subjectId));
+            subjectLiked.setStatus(Integer.valueOf(value.toString()));
+            subjectLikedList.add(subjectLiked);
+        });
+        subjectLikedService.batchInsert(subjectLikedList);
     }
 
     @Override
