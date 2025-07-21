@@ -2,7 +2,10 @@ package com.cjl.subject.domain.service.Impl;
 
 import com.alibaba.fastjson.JSON;
 import com.cjl.subject.common.entity.PageResult;
+import com.cjl.subject.common.enums.IsDeletedFlagEnum;
 import com.cjl.subject.common.enums.SubjectLikedStatusEnum;
+import com.cjl.subject.common.util.LoginUtil;
+import com.cjl.subject.domain.convert.SubjectLikedBOConverter;
 import com.cjl.subject.domain.entity.SubjectLikedBO;
 import com.cjl.subject.domain.redis.RedisUtil;
 import com.cjl.subject.domain.service.SubjectLikedDomainService;
@@ -105,6 +108,7 @@ public class SubjectLikedDomainServiceImpl implements SubjectLikedDomainService 
             subjectLiked.setLikeUserId(likedUser);
             subjectLiked.setSubjectId(Long.valueOf(subjectId));
             subjectLiked.setStatus(Integer.valueOf(value.toString()));
+            subjectLiked.setIsDeleted(IsDeletedFlagEnum.UN_DELETED.getCode());
             subjectLikedList.add(subjectLiked);
         });
         subjectLikedService.batchInsert(subjectLikedList);
@@ -112,6 +116,20 @@ public class SubjectLikedDomainServiceImpl implements SubjectLikedDomainService 
 
     @Override
     public PageResult<SubjectLikedBO> getSubjectLikedPage(SubjectLikedBO subjectLikedBO) {
-        return null;
+        PageResult<SubjectLikedBO> result = new PageResult<>();
+        subjectLikedBO.setPageNo(result.getPageNo());
+        subjectLikedBO.setPageSize(result.getPageSize());
+        int start = (subjectLikedBO.getPageNo() - 1) * subjectLikedBO.getPageSize();
+        SubjectLiked subjectLiked = SubjectLikedBOConverter.INSTANCE.convertBOToEntity(subjectLikedBO);
+        subjectLiked.setLikeUserId(LoginUtil.getLoginId());
+        int count = subjectLikedService.countByCondition(subjectLiked);
+        if (count == 0) {
+            return result;
+        }
+        List<SubjectLiked> subjectLikedList = subjectLikedService.queryPage(subjectLiked, start, subjectLikedBO.getPageSize());
+        List<SubjectLikedBO> subjectLikedBOList = SubjectLikedBOConverter.INSTANCE.convertListEntityToBO(subjectLikedList);
+        result.setRecords(subjectLikedBOList);
+        result.setTotal(count);
+        return result;
     }
 }
